@@ -1,0 +1,74 @@
+# Kodi Media Center language file
+# Addon Name: Free Surround ADSP addon
+# Addon id: adsp.freesurround
+# Addon version: 0.1.0
+# Addon Provider: Alwin Esch, Team KODI
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Main\n"
+"Report-Msgid-Bugs-To: http://trac.kodi.tv/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-main/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Free Surround"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Free Surround ..."
+msgstr ""
+
+msgctxt "#30002"
+msgid "FreeSurround, a new surround processor. Is based on foo_dsp_fsurround from pro_optimizer on foobar2000 0.9.x."
+msgstr ""
+
+msgctxt "#30003"
+msgid "FreeSurround is meant to be the KODI equivalent of your hi-fi receiver's Dolby ProLogic II button (except that it uses a different algorithm).\n\nIts purpose is to decode surround information from your stereo music (including mp3, of course), and to produce multichannel output from it. It works with any stereo music containing surround info in a coding scheme compatible with any the following decoders:\n - Dolby Surround\n - Dolby ProLogic\n - Dolby ProLogic II\n - SRS CircleSurround\n - SRS CircleSurround II\n - DTS Neo:6\n - Lexicon Logic7\n - Stereo Quadrophonic (SQ)\n - Quadrophonic Stereo (QS)\n\nIs based on foo_dsp_fsurround from pro_optimizer on foobar2000 0.9.x"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Free Surround"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Steering mode"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Depth (backwards scaling)"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Focus (ambience <-> localization)"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Center width"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Front separation"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Rear separation"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Panorama (circular wrap)"
+msgstr ""
+
+msgctxt "#30019"
+msgid "Phase Mode"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Dimension (front/back shift)"
+msgstr ""

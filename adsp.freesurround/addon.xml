@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon
+	id="adsp.freesurround"
+	version="0.1.0"
+	name="Free Surround Processor"
+	provider-name="Team KODI">
+	<requires>
+		<c-pluff version="0.1"/>
+		<import addon="kodi.adsp" version="0.0.1"/>
+	</requires>
+	<extension
+		point="kodi.adsp"
+		library_linux="adsp.freesurround.so"
+		library_osx="adsp.freesurround.dylib"
+		library_wingl="adsp.freesurround.dll"
+		library_windx="adsp.freesurround.dll"
+		library_android="libadsp.freesurround.so" />
+	<extension point="kodi.addon.metadata">
+		<summary lang="en">Free Surround Audio DSP Processor</summary>
+		<description lang="en">FreeSurround is meant to be the KODI equivalent of your hi-fi receiver's Dolby ProLogic II button.
+It's purpose is to decode surround information from your stereo music and to produce multichannel output from it.</description>
+		<disclaimer lang="en">This is a open source audio dsp processing system, based upon work from pro_optimizer on foobar2000</disclaimer>
+		<platform>all</platform>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+		<forum></forum>
+		<website></website>
+		<email></email>
+		<source>https://github.com/kodi-adsp/adsp.freesurround</source>
+	</extension>
+</addon>

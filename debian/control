@@ -1,0 +1,22 @@
+Source: kodi-audiodsp-freesurround
+Priority: extra
+Maintainer: wsnipex <wsnipex@xbmc.org>
+Build-Depends: debhelper (>= 8.0.0), cmake, kodi-addon-dev, libkodiplatform-dev, kodi-audio-dev, libfftw3-dev, libsamplerate0-dev, doxygen
+Standards-Version: 3.9.2
+Section: libs
+Homepage: http://kodi.tv
+
+Package: kodi-audiodsp-freesurround
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Audio DSP freesurround addon for KODI
+ KODI freesurround audio DSP addon
+
+Package: kodi-audiodsp-freesurround-dbg
+Section: debug
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: debug symbols for Audio DSP freesurround addon for KODI
+ contains the debug symbols for the KODI freesurround audio DSP addon
+
