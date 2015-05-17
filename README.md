@@ -29,5 +29,15 @@ It works with any stereo music containing surround info in a coding scheme compa
 - Quadrophonic Stereo (QS)
 
 -------------
+To enable LFE channel output from add-on, must be after first start generated "ADSPFreeSurrAddonSettings.xml" changed by hand.
+There are the following values (set to true and also the cut off frequencies can be changed):
+```XML
+        <bassredirection>false</bassredirection>
+        <lowcutoff>40.000000</lowcutoff>
+        <highcutoff>90.000000</highcutoff>
+```
+Thats normally part of DSP system post process thats why it is not selectable on skin!
+
+-------------
 ### License
 [GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007](https://github.com/kodi-adsp/adsp.freesurround/blob/master/LICENSE.md)
