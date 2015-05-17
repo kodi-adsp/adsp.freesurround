@@ -1,7 +1,7 @@
 Source: kodi-audiodsp-freesurround
 Priority: extra
 Maintainer: wsnipex <wsnipex@xbmc.org>
-Build-Depends: debhelper (>= 8.0.0), cmake, kodi-addon-dev, libkodiplatform-dev, kodi-audio-dev, libfftw3-dev, libsamplerate0-dev, doxygen
+Build-Depends: debhelper (>= 8.0.0), cmake, kodi-addon-dev, libkodiplatform-dev (>= 16.0.0), kodi-audio-dev, libfftw3-dev, doxygen
 Standards-Version: 3.9.2
 Section: libs
 Homepage: http://kodi.tv

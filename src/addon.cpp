@@ -21,8 +21,8 @@
 #include <string>
 #include "addon.h"
 #include "kodi/kodi_adsp_dll.h"
-#include "kodi/util/util.h"
-#include "kodi/util/StdString.h"
+#include "platform/util/util.h"
+#include "platform/util/StdString.h"
 #include "GUIDialogFreeSurround.h"
 #include "DSPProcessFreeSurround.h"
 

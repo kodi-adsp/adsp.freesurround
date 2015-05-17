@@ -18,7 +18,7 @@
  *
  */
 
-#include "kodi/util/StdString.h"
+#include "platform/util/StdString.h"
 #include "addon.h"
 #include "FreeSurroundSettings.h"
 

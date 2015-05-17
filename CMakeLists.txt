@@ -8,6 +8,7 @@ enable_language(CXX)
 
 find_package(kodi REQUIRED)
 find_package(kodiplatform REQUIRED)
+find_package(platform REQUIRED)
 
 include_directories(${kodiplatform_INCLUDE_DIRS}
                     ${KODI_INCLUDE_DIR})
@@ -21,7 +22,8 @@ set(FREESURROUND_SOURCES src/addon.cpp
                          src/ChannelMaps.cpp
                          src/FreeSurroundDecoder.cpp)
 
-set(DEPLIBS ${kodiplatform_LIBRARIES})
+set(DEPLIBS ${kodiplatform_LIBRARIES}
+            ${platform_LIBRARIES})
 
 build_addon(adsp.freesurround FREESURROUND DEPLIBS)
 
