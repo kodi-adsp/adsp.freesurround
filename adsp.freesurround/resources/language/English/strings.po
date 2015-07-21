@@ -22,15 +22,15 @@ msgid "Free Surround"
 msgstr ""
 
 msgctxt "#30001"
-msgid "Free Surround ..."
+msgid "Free Surround..."
 msgstr ""
 
 msgctxt "#30002"
-msgid "FreeSurround, a new surround processor. Is based on foo_dsp_fsurround from pro_optimizer on foobar2000 0.9.x."
+msgid "FreeSurround, is a new surround processor. It's based on foo_dsp_fsurround which is part of the pro_optimizer found in foobar2000 0.9.x."
 msgstr ""
 
 msgctxt "#30003"
-msgid "FreeSurround is meant to be the KODI equivalent of your hi-fi receiver's Dolby ProLogic II button (except that it uses a different algorithm).\n\nIts purpose is to decode surround information from your stereo music (including mp3, of course), and to produce multichannel output from it. It works with any stereo music containing surround info in a coding scheme compatible with any the following decoders:\n - Dolby Surround\n - Dolby ProLogic\n - Dolby ProLogic II\n - SRS CircleSurround\n - SRS CircleSurround II\n - DTS Neo:6\n - Lexicon Logic7\n - Stereo Quadrophonic (SQ)\n - Quadrophonic Stereo (QS)\n\nIs based on foo_dsp_fsurround from pro_optimizer on foobar2000 0.9.x"
+msgid "FreeSurround is intended to be the Kodi equivalent of your hi-fi receiver's Dolby ProLogic II button with the exception that it uses a different algorithm.\nIts purpose is to decode surround information from your stereo music from mp3 tracks, etc., and to produce multichannel output from it. It works with any stereo music containing surround info in a coding scheme compatible with any the following decoders:\n - Dolby Surround\n - Dolby ProLogic\n - Dolby ProLogic II\n - SRS CircleSurround\n - SRS CircleSurround II\n - DTS Neo:6\n - Lexicon Logic7\n - Stereo Quadrophonic (SQ)\n - Quadrophonic Stereo (QS)\n\nIs based on the foo_dsp_fsurround which is part of the pro_optimizer found in foobar2000 0.9.x"
 msgstr ""
 
 msgctxt "#30011"
@@ -42,11 +42,11 @@ msgid "Steering mode"
 msgstr ""
 
 msgctxt "#30013"
-msgid "Depth (backwards scaling)"
+msgid "Depth - Backwards scaling"
 msgstr ""
 
 msgctxt "#30014"
-msgid "Focus (ambience <-> localization)"
+msgid "Focus - Ambience <-> localization"
 msgstr ""
 
 msgctxt "#30015"
@@ -62,13 +62,13 @@ msgid "Rear separation"
 msgstr ""
 
 msgctxt "#30018"
-msgid "Panorama (circular wrap)"
+msgid "Panorama - Circular wrap"
 msgstr ""
 
 msgctxt "#30019"
-msgid "Phase Mode"
+msgid "Phase mode"
 msgstr ""
 
 msgctxt "#30020"
-msgid "Dimension (front/back shift)"
+msgid "Dimension - Front / Back shift"
 msgstr ""
