@@ -33,6 +33,10 @@ using namespace ADDON;
 #define snprintf _snprintf
 #endif
 
+#if defined(TARGET_WINDOWS)
+  #undef CreateDirectory
+#endif
+
 
 /* User adjustable settings are saved here.
  * Default values are defined inside addon.h
@@ -91,6 +95,12 @@ ADDON_STATUS ADDON_Create(void* hdl, void* props)
   g_strUserPath   = adspprops->strUserPath;
   g_strAddonPath  = adspprops->strAddonPath;
 
+  // create addon user path
+  if (!KODI->DirectoryExists(g_strUserPath.c_str()))
+  {
+    KODI->CreateDirectory(g_strUserPath.c_str());
+  }
+  
   for (int i = 0; i < AE_DSP_STREAM_MAX_STREAMS; ++i)
     g_usedDSPs[i] = NULL;
 

@@ -32,7 +32,7 @@ using namespace ADDON;
 
 std::string GetSettingsFile()
 {
-  string settingFile = g_strAddonPath;
+  string settingFile = g_strUserPath;
   if (settingFile.at(settingFile.size() - 1) == '\\' ||
       settingFile.at(settingFile.size() - 1) == '/')
     settingFile.append("ADSPFreeSurrAddonSettings.xml");
