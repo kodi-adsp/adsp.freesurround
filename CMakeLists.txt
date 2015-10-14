@@ -16,8 +16,8 @@ include_directories(${kodiplatform_INCLUDE_DIRS}
 
 set(FREESURROUND_SOURCES src/addon.cpp
                          src/GUIDialogFreeSurround.cpp
-                         src/kissfft/kiss_fft.cpp
-                         src/kissfft/kiss_fftr.cpp
+                         src/kissfft/kiss_fft.c
+                         src/kissfft/kiss_fftr.c
                          src/DSPProcessFreeSurround.cpp
                          src/FreeSurroundSettings.cpp
                          src/ChannelMaps.cpp
