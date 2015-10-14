@@ -27,7 +27,6 @@
 #include "GUIDialogFreeSurround.h"
 #include "DSPProcessFreeSurround.h"
 
-using namespace std;
 using namespace ADDON;
 
 #define BUTTON_OK                                   1
@@ -114,7 +113,7 @@ void CGUIDialogFreeSurround::DoModal()
 
 bool CGUIDialogFreeSurround::OnInit()
 {
-  LoadSettingsData(ID_MASTER_PROCESS_FREE_SURROUND);
+  LoadSettingsData();
 
   m_CircularWrap = GUI->Control_getSettingsSlider(m_window, DSP_SETTING_FREESURROUND_CIRCULAR_WRAP);
   m_CircularWrap->SetIntRange(0, 360);

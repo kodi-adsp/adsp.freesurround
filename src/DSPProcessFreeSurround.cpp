@@ -26,15 +26,12 @@
 #include "kodi/libKODI_adsp.h"
 #include "platform/util/StdString.h"
 
-#include "DSPProcessFreeSurround.h"
 #include "addon.h"
+#include "DSPProcessFreeSurround.h"
 #include "FreeSurroundSettings.h"
-
-#define FFT_LENGTH 1024
 
 // our default internal block size, in floats
 static const unsigned default_block_size = SURROUND_BUFSIZE;
-unsigned int block_size = default_block_size;
 
 CDSPProcess_FreeSurround::CDSPProcess_FreeSurround(unsigned int streamId)
   : m_StreamID(streamId)
@@ -68,7 +65,7 @@ AE_DSP_ERROR CDSPProcess_FreeSurround::StreamCreate(const AE_DSP_SETTINGS *setti
     return AE_DSP_ERROR_IGNORE_ME;
   if (settings->iInChannels > 2)
     return AE_DSP_ERROR_IGNORE_ME;
-  if (settings->iOutChannels <= 5)
+  if (settings->iOutChannels <= 3)
     return AE_DSP_ERROR_IGNORE_ME;
   if (settings->iProcessSamplerate > 96000)
     return AE_DSP_ERROR_IGNORE_ME;
@@ -99,12 +96,13 @@ AE_DSP_ERROR CDSPProcess_FreeSurround::StreamInitialize(const AE_DSP_SETTINGS *s
 
   if (!m_Decoder)
     delete m_Decoder;
-  m_Decoder = new CFreeSurroundDecoder(m_DecoderChannelSetup, block_size, m_SampleRate);
+  m_Decoder = new CFreeSurroundDecoder(m_DecoderChannelSetup, default_block_size, m_SampleRate);
 
   m_Decoder->Flush();
   ResetSettings();
 
   m_ProcessBufferPos = 0;
+  m_LatencyFrames = 0;
 
   return AE_DSP_ERROR_NO_ERROR;
 }
@@ -120,7 +118,6 @@ void CDSPProcess_FreeSurround::Deinitialize()
 
 AE_DSP_ERROR CDSPProcess_FreeSurround::StreamDestroy()
 {
-
   return AE_DSP_ERROR_NO_ERROR;
 }
 
@@ -146,26 +143,26 @@ void CDSPProcess_FreeSurround::ResetSettings()
 
 void CDSPProcess_FreeSurround::SetParams()
 {
-  if (m_Decoder)
-  {
-    m_Decoder->SetCircularWrap(m_Params.fCircularWrap);
-    m_Decoder->SetShift(m_Params.fShift);
-    m_Decoder->SetDepth(m_Params.fDepth);
-    m_Decoder->SetFocus(m_Params.fFocus);
-    m_Decoder->SetCenterImage(m_Params.fCenterImage);
-    m_Decoder->SetFrontSeparation(m_Params.fFrontSeparation);
-    m_Decoder->SetRearSeparation(m_Params.fRearSeparation);
-    m_Decoder->SetBassRedirection(m_Params.bLFE);
-    m_Decoder->SetLowCutoff(m_Params.fLowCutoff);
-    m_Decoder->SetHighCutoff(m_Params.fHighCutoff);
-  }
+  if (!m_Decoder)
+    return;
+
+  m_Decoder->SetCircularWrap(m_Params.fCircularWrap);
+  m_Decoder->SetShift(m_Params.fShift);
+  m_Decoder->SetDepth(m_Params.fDepth);
+  m_Decoder->SetFocus(m_Params.fFocus);
+  m_Decoder->SetCenterImage(m_Params.fCenterImage);
+  m_Decoder->SetFrontSeparation(m_Params.fFrontSeparation);
+  m_Decoder->SetRearSeparation(m_Params.fRearSeparation);
+  m_Decoder->SetBassRedirection(m_Params.bLFE);
+  m_Decoder->SetLowCutoff(m_Params.fLowCutoff);
+  m_Decoder->SetHighCutoff(m_Params.fHighCutoff);
 }
 
 float CDSPProcess_FreeSurround::StreamGetDelay()
 {
   float delay = 0.0;
 
-  if (m_LatencyFrames != 0 && m_Decoder)
+  if (m_LatencyFrames != 0)
     delay = ((float)m_LatencyFrames)/(2*m_SampleRate);
 
   return delay;
@@ -176,7 +173,7 @@ unsigned int CDSPProcess_FreeSurround::StreamProcess(float **array_in, float **a
   if (!m_Decoder)
     return samples;
 
-  float **outputs   = m_Decoder->getOutputBuffers();
+  float **outputs = m_Decoder->getOutputBuffers();
 
   for (unsigned int pos = 0; pos < samples; ++pos)
   {
@@ -385,15 +382,15 @@ unsigned int CDSPProcess_FreeSurround::StreamProcess(float **array_in, float **a
       }
     }
 
-    m_ProcessBufferPos++;
+    ++m_ProcessBufferPos;
 
     // If the FIFO is full
-    if (m_ProcessBufferPos >= block_size)
+    if (m_ProcessBufferPos >= default_block_size)
     {
       m_Decoder->Decode(m_InbufArray);
 
       m_ProcessBufferPos = 0;
-      m_LatencyFrames = block_size;
+      m_LatencyFrames = default_block_size;
     }
   }
 

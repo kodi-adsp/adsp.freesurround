@@ -33,9 +33,8 @@
 
 #include "FreeSurroundDecoder.h"
 
-const float pi = 3.141592654f;
-const float epsilon = 0.000001f;
-using namespace std;
+const double pi      = 3.14159265358979323846;
+const double epsilon = 0.000001;
 
 #ifndef TARGET_WINDOWS
   #undef min
@@ -69,9 +68,9 @@ CFreeSurroundDecoder::CFreeSurroundDecoder(channel_setup setup, unsigned blocksi
   for (unsigned k=0; k < m_BufferSize; ++k)
     m_Window[k] = sqrt(0.5 * (1 - cos(2 * pi * k / m_BufferSize)) / m_BufferSize);
 
-  m_Destination = (double*)calloc(m_BufferSize, sizeof(double));
-  m_TotalLeft   = (double*)calloc(m_BufferSize, sizeof(double));
-  m_TotalRight  = (double*)calloc(m_BufferSize, sizeof(double));
+  m_Destination = (float*)calloc(m_BufferSize, sizeof(float));
+  m_TotalLeft   = (float*)calloc(m_BufferSize, sizeof(float));
+  m_TotalRight  = (float*)calloc(m_BufferSize, sizeof(float));
   m_FreqLeft    = (cplx*)calloc(m_BufferSize / 2 + 1, sizeof(cplx));
   m_FreqRight   = (cplx*)calloc(m_BufferSize / 2 + 1, sizeof(cplx));
 
@@ -116,12 +115,15 @@ float **CFreeSurroundDecoder::getOutputBuffers()
 
 void CFreeSurroundDecoder::Decode(float **inputs)
 {
+  //! append incoming data to the end of the input buffer
   memcpy(&m_InputBuffer[0][m_BufferSizeHalf], &inputs[0][0], m_BufferSize*sizeof(float));
   memcpy(&m_InputBuffer[1][m_BufferSizeHalf], &inputs[1][0], m_BufferSize*sizeof(float));
 
+  //! process first and second half, overlapped
   BufferedDecode(m_InputBuffer, 0);
   BufferedDecode(m_InputBuffer, m_BufferSizeHalf);
 
+  //! shift last half of the input to the beginning (for overlapping with a future block)
   memcpy(&m_InputBuffer[0][0], &m_InputBuffer[0][m_BufferSize], m_BufferSizeHalf*sizeof(float));
   memcpy(&m_InputBuffer[1][0], &m_InputBuffer[1][m_BufferSize], m_BufferSizeHalf*sizeof(float));
 
@@ -136,7 +138,7 @@ void CFreeSurroundDecoder::Flush()
   m_BufferEmpty = true;
 }
 
-inline float CFreeSurroundDecoder::sqr(double x)
+inline double CFreeSurroundDecoder::sqr(double x)
 {
   return x * x;
 }
@@ -156,29 +158,29 @@ inline cplx CFreeSurroundDecoder::polar(double a, double p)
   return cplx(a * cos(p), a * sin(p));
 }
 
-inline float CFreeSurroundDecoder::Min(double a, double b)
+inline double CFreeSurroundDecoder::Min(double a, double b)
 {
   return a < b ? a : b;
 }
 
-inline float CFreeSurroundDecoder::Max(double a, double b)
+inline double CFreeSurroundDecoder::Max(double a, double b)
 {
   return a > b ? a : b;
 }
 
-inline float CFreeSurroundDecoder::clamp(double x)
+inline double CFreeSurroundDecoder::clamp(double x)
 {
   return Max(-1, Min(1, x));
 }
 
-inline float CFreeSurroundDecoder::sign(double x)
+inline double CFreeSurroundDecoder::sign(double x)
 {
   return x < 0 ? -1 : (x > 0 ? 1 : 0);
 }
 
 inline double CFreeSurroundDecoder::EdgeDistance(double a)
 {
-  return min(sqrt(1 + sqr(tan(a))), sqrt(1 + sqr(1 / tan(a))));
+  return Min(sqrt(1 + sqr(tan(a))), sqrt(1 + sqr(1 / tan(a))));
 }
 
 void CFreeSurroundDecoder::BufferedDecode(float *input[2], int ptr)
@@ -191,11 +193,11 @@ void CFreeSurroundDecoder::BufferedDecode(float *input[2], int ptr)
   }
 
   //! map into spectral domain
-  kiss_fftr(m_FFTForward, &m_TotalLeft[0],  (kiss_fft_cpx*)&m_FreqLeft[0]);
-  kiss_fftr(m_FFTForward, &m_TotalRight[0], (kiss_fft_cpx*)&m_FreqRight[0]);
+  kiss_fftr(m_FFTForward, m_TotalLeft,  (kiss_fft_cpx*)m_FreqLeft);
+  kiss_fftr(m_FFTForward, m_TotalRight, (kiss_fft_cpx*)m_FreqRight);
 
-  // compute multichannel output signal in the spectral domain
-  for (unsigned f = 1; f < m_BufferSizeHalf; ++f)
+  //! compute multichannel output signal in the spectral domain
+  for (unsigned int f = 1; f < m_BufferSizeHalf; ++f)
   {
     //! get Lt/Rt amplitudes & phases
     double ampL   = amplitude(m_FreqLeft[f]);
@@ -232,7 +234,7 @@ void CFreeSurroundDecoder::BufferedDecode(float *input[2], int ptr)
     for (unsigned c = 0; c < m_Channels-1; ++c)
     {
       //! look up channel map at respective position (with bilinear interpolation) and build the signal
-      vector<float*> &a = chn_alloc[m_ChannelSetup][c];
+      std::vector<float*> &a = chn_alloc[m_ChannelSetup][c];
 
       m_Signal[c][f] = polar(amp_total*((1-x)*(1-y)*a[q][p] + x*(1-y)*a[q][p+1] + (1-x)*y*a[q+1][p] + x*y*a[q+1][p+1]), phase_of[1+(int)sign(chn_xsf[m_ChannelSetup][c])]);
     }
@@ -241,7 +243,7 @@ void CFreeSurroundDecoder::BufferedDecode(float *input[2], int ptr)
     if (m_UseLFE && f < m_HighCutoff)
     {
       //! level of LFE channel according to normalized frequency
-      double lfe_level = f < m_LowCutoff ? 1 : 0.5*(1+cos(pi*(f-m_LowCutoff)/(m_HighCutoff-m_LowCutoff)));
+      float lfe_level = f < m_LowCutoff ? 1 : 0.5*(1+cos(pi*(f-m_LowCutoff)/(m_HighCutoff-m_LowCutoff)));
       //! assign LFE channel
       m_Signal[m_Channels-1][f] = lfe_level * polar(amp_total,phase_of[1]);
       //! subtract the signal from the other channels
@@ -253,11 +255,11 @@ void CFreeSurroundDecoder::BufferedDecode(float *input[2], int ptr)
   for (unsigned channel = 0; channel < m_Channels; ++channel)
   {
     //! shift the last 2/3 to the first 2/3 of the output buffer
-    memcpy(&m_OutputBuffer[channel][0], &m_OutputBuffer[channel][m_BufferSizeHalf], m_BufferSize*sizeof(float));
+    memcpy(&m_OutputBuffer[channel][0], &m_OutputBuffer[channel][m_BufferSizeHalf], m_BufferSize*sizeof(double));
     //! and clear the rest
-    memset(&m_OutputBuffer[channel][m_BufferSize], 0, m_BufferSizeHalf*sizeof(float));
+    memset(&m_OutputBuffer[channel][m_BufferSize], 0, m_BufferSizeHalf*sizeof(double));
 
-    kiss_fftri(m_FFTInverse,(kiss_fft_cpx*)&m_Signal[channel][0], &m_Destination[0]);
+    kiss_fftri(m_FFTInverse, (kiss_fft_cpx*)m_Signal[channel], &m_Destination[0]);
 
     //! add the result to the last 2/3 of the output buffer, windowed (and remultiplex)
     for (unsigned k = 0; k < m_BufferSize; ++k)
