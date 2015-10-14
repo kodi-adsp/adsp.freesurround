@@ -30,8 +30,6 @@
 #include "addon.h"
 #include "FreeSurroundSettings.h"
 
-#define FFT_LENGTH 1024
-
 // our default internal block size, in floats
 static const unsigned default_block_size = SURROUND_BUFSIZE;
 unsigned int block_size = default_block_size;
@@ -176,7 +174,7 @@ unsigned int CDSPProcess_FreeSurround::StreamProcess(float **array_in, float **a
   if (!m_Decoder)
     return samples;
 
-  float **outputs   = m_Decoder->getOutputBuffers();
+  float **outputs = m_Decoder->getOutputBuffers();
 
   for (unsigned int pos = 0; pos < samples; ++pos)
   {

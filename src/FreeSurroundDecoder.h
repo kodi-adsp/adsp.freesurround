@@ -27,7 +27,6 @@
 
 #include <complex>
 
-#define kiss_fft_scalar double //!< we're using doubles here...
 #include "kissfft/kiss_fftr.h"
 #include "ChannelMaps.h"
 
@@ -66,7 +65,7 @@ typedef enum {
   cs_legacy = 0 // same channels as cs_5point1 but different upmixing transform; does not support the focus control
 } channel_setup;
 
-typedef std::complex<double> cplx;
+typedef std::complex<kiss_fft_scalar> cplx;
 
 /**
 * The FreeSurround decoder.
@@ -221,9 +220,9 @@ private:
   bool          m_UseLFE;            //!< whether to use the LFE channel
 
   //! FFT data structures
-  double       *m_Destination;
-  double       *m_TotalLeft;         //!< left total, (source arrays), time-domain destination buffer array
-  double       *m_TotalRight;        //!< right total,   "
+  float        *m_Destination;
+  float        *m_TotalLeft;         //!< left total, (source arrays), time-domain destination buffer array
+  float        *m_TotalRight;        //!< right total,   "
   cplx         *m_FreqLeft;          //!< left total in frequency domain
   cplx         *m_FreqRight;         //!< right total in frequency domain
   kiss_fftr_cfg m_FFTForward;        //!< FFT buffers
@@ -237,14 +236,14 @@ private:
   double       *m_Window;            //!< the window function, precomputed
 
   //! helper functions
-  static inline float sqr(double x);
+  static inline double sqr(double x);
   static inline double amplitude(const cplx &x);
   static inline double phase(const cplx &x);
   static inline cplx polar(double a, double p);
-  static inline float Min(double a, double b);
-  static inline float Max(double a, double b);
-  static inline float clamp(double x);
-  static inline float sign(double x);
+  static inline double Min(double a, double b);
+  static inline double Max(double a, double b);
+  static inline double clamp(double x);
+  static inline double sign(double x);
 
   //!> get the distance of the soundfield edge, along a given angle
   static inline double EdgeDistance(double a);
