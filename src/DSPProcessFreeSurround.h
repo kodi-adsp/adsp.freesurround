@@ -26,21 +26,6 @@
 #include "FreeSurroundDecoder.h"
 #include "FreeSurroundSettings.h"
 
-#define ID_MASTER_PROCESS_FREE_SURROUND   1300
-
-struct sModeFlag
-{
-  int IdNo;
-  int Flags;
-};
-
-extern std::string g_strAddonPath;
-extern std::string GetSettingsFile();
-
-class cDSPProcessor;
-class cDSPProcessorSoundTest;
-class CGUIDialogSpeakerGain;
-
 #define SURROUND_BUFSIZE 8192
 
 class CDSPProcess_FreeSurround

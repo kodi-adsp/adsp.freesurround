@@ -27,12 +27,11 @@
 
 #include "FreeSurroundSettings.h"
 
-using namespace std;
 using namespace ADDON;
 
 std::string GetSettingsFile()
 {
-  string settingFile = g_strUserPath;
+  std::string settingFile = g_strUserPath;
   if (settingFile.at(settingFile.size() - 1) == '\\' ||
       settingFile.at(settingFile.size() - 1) == '/')
     settingFile.append("ADSPFreeSurrAddonSettings.xml");
@@ -60,10 +59,10 @@ CDSPSettings::CDSPSettings()
   m_Settings.fHighCutoff = 90.0;
 }
 
-bool CDSPSettings::LoadSettingsData(bool initial)
+bool CDSPSettings::LoadSettingsData(bool initial /* = false */)
 {
   TiXmlDocument xmlDoc;
-  string strSettingsFile = GetSettingsFile();
+  std::string strSettingsFile = GetSettingsFile();
 
   if (!xmlDoc.LoadFile(strSettingsFile))
   {

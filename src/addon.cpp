@@ -37,6 +37,8 @@ using namespace ADDON;
   #undef CreateDirectory
 #endif
 
+#define ID_MASTER_PROCESS_FREE_SURROUND   1300
+
 
 /* User adjustable settings are saved here.
  * Default values are defined inside addon.h
@@ -100,7 +102,7 @@ ADDON_STATUS ADDON_Create(void* hdl, void* props)
   {
     KODI->CreateDirectory(g_strUserPath.c_str());
   }
-  
+
   for (int i = 0; i < AE_DSP_STREAM_MAX_STREAMS; ++i)
     g_usedDSPs[i] = NULL;
 
