@@ -66,7 +66,7 @@ AE_DSP_ERROR CDSPProcess_FreeSurround::StreamCreate(const AE_DSP_SETTINGS *setti
     return AE_DSP_ERROR_IGNORE_ME;
   if (settings->iInChannels > 2)
     return AE_DSP_ERROR_IGNORE_ME;
-  if (settings->iOutChannels <= 5)
+  if (settings->iOutChannels <= 3)
     return AE_DSP_ERROR_IGNORE_ME;
   if (settings->iProcessSamplerate > 96000)
     return AE_DSP_ERROR_IGNORE_ME;
