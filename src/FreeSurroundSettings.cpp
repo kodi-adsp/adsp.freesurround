@@ -121,27 +121,25 @@ bool CDSPSettings::LoadSettingsData(bool initial /* = false */)
 bool CDSPSettings::SaveSettingsData()
 {
   TiXmlDocument xmlDoc;
-  TiXmlElement xmlRootElement("freesurround");
-  TiXmlNode *pRoot = xmlDoc.InsertEndChild(xmlRootElement);
-  if (pRoot == NULL)
-    return false;
+  TiXmlDeclaration * decl       = new TiXmlDeclaration("1.0", "", "");
+  TiXmlElement * xmlRootElement = new TiXmlElement("freesurround");
+  TiXmlNode * xmlCS2Setting     = new TiXmlElement("settings");
 
-  TiXmlElement xmlCS2Setting("settings");
-  TiXmlNode* pNode = pRoot->InsertEndChild(xmlCS2Setting);
-  if (pNode)
-  {
-    XMLUtils::SetFloat(pNode, "inputgain", m_Settings.fInputGain);
-    XMLUtils::SetFloat(pNode, "circularwrap", m_Settings.fCircularWrap);
-    XMLUtils::SetFloat(pNode, "shift", m_Settings.fShift);
-    XMLUtils::SetFloat(pNode, "depth", m_Settings.fDepth);
-    XMLUtils::SetFloat(pNode, "centerimage", m_Settings.fCenterImage);
-    XMLUtils::SetFloat(pNode, "focus", m_Settings.fFocus);
-    XMLUtils::SetFloat(pNode, "frontseparation", m_Settings.fFrontSeparation);
-    XMLUtils::SetFloat(pNode, "rearseparation", m_Settings.fRearSeparation);
-    XMLUtils::SetBoolean(pNode, "bassredirection", m_Settings.bLFE);
-    XMLUtils::SetFloat(pNode, "lowcutoff", m_Settings.fLowCutoff);
-    XMLUtils::SetFloat(pNode, "highcutoff", m_Settings.fHighCutoff);
-  }
+  XMLUtils::SetFloat(xmlCS2Setting, "inputgain", m_Settings.fInputGain);
+  XMLUtils::SetFloat(xmlCS2Setting, "circularwrap", m_Settings.fCircularWrap);
+  XMLUtils::SetFloat(xmlCS2Setting, "shift", m_Settings.fShift);
+  XMLUtils::SetFloat(xmlCS2Setting, "depth", m_Settings.fDepth);
+  XMLUtils::SetFloat(xmlCS2Setting, "centerimage", m_Settings.fCenterImage);
+  XMLUtils::SetFloat(xmlCS2Setting, "focus", m_Settings.fFocus);
+  XMLUtils::SetFloat(xmlCS2Setting, "frontseparation", m_Settings.fFrontSeparation);
+  XMLUtils::SetFloat(xmlCS2Setting, "rearseparation", m_Settings.fRearSeparation);
+  XMLUtils::SetBoolean(xmlCS2Setting, "bassredirection", m_Settings.bLFE);
+  XMLUtils::SetFloat(xmlCS2Setting, "lowcutoff", m_Settings.fLowCutoff);
+  XMLUtils::SetFloat(xmlCS2Setting, "highcutoff", m_Settings.fHighCutoff);
+
+  xmlRootElement->LinkEndChild(xmlCS2Setting);
+  xmlDoc.LinkEndChild(decl);
+  xmlDoc.LinkEndChild(xmlRootElement);
 
   if (!xmlDoc.SaveFile(GetSettingsFile()))
   {

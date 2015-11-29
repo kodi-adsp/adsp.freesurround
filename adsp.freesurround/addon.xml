@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
 	id="adsp.freesurround"
-	version="0.2.0"
+	version="0.2.1"
 	name="Free Surround Processor"
 	provider-name="Team KODI">
 	<requires>
@@ -22,7 +22,7 @@ It's purpose is to decode surround information from your stereo music and to pro
 		<disclaimer lang="en">This is a open source audio dsp processing system, based upon work from pro_optimizer on foobar2000</disclaimer>
 		<platform>all</platform>
 		<license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
-		<forum></forum>
+		<forum>http://forum.kodi.tv/forumdisplay.php?fid=235</forum>
 		<website></website>
 		<email></email>
 		<source>https://github.com/kodi-adsp/adsp.freesurround</source>
