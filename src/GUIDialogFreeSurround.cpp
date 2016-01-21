@@ -22,7 +22,7 @@
 #include "kodi/libKODI_guilib.h"
 
 #include "kodi/util/XMLUtils.h"
-#include "platform/util/util.h"
+#include "p8-platform/util/util.h"
 
 #include "GUIDialogFreeSurround.h"
 #include "DSPProcessFreeSurround.h"

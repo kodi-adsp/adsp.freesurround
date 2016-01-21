@@ -22,8 +22,8 @@
 #include "kodi/libKODI_guilib.h"
 
 #include "kodi/util/XMLUtils.h"
-#include "platform/util/util.h"
-#include "platform/util/StdString.h"
+#include "p8-platform/util/util.h"
+#include "p8-platform/util/StdString.h"
 
 #include "FreeSurroundSettings.h"
 

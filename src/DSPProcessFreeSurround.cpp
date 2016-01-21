@@ -24,7 +24,7 @@
 
 #include "kodi/libXBMC_addon.h"
 #include "kodi/libKODI_adsp.h"
-#include "platform/util/StdString.h"
+#include "p8-platform/util/StdString.h"
 
 #include "addon.h"
 #include "DSPProcessFreeSurround.h"
