@@ -1,3 +1,5 @@
+[![Linux Build Status](https://travis-ci.org/kodi-adsp/adsp.freesurround.svg?branch=master)](https://travis-ci.org/kodi-adsp/adsp.freesurround)
+
 ### adsp.freesurround
 -------------
 *<p align="center">![alt tag](https://github.com/kodi-adsp/adsp.freesurround/blob/master/adsp.freesurround/icon.png)</p>*
