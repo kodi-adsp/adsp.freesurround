@@ -1,16 +1,15 @@
 #### CI Testing
 * Tarvis-CI for OS X, iOS, Linux [![Build Status](https://travis-ci.org/kodi-adsp/adsp.freesurround.svg?branch=master)](https://travis-ci.org/kodi-adsp/adsp.freesurround)
-* AppVeyor for Windows [![Build status][![Build status](https://ci.appveyor.com/api/projects/status/6u6xsrki4y7b9jus/branch/master?svg=true)](https://ci.appveyor.com/project/AchimTuran/adsp-freesurround/branch/master)
+* AppVeyor for Windows [![Build status](https://ci.appveyor.com/api/projects/status/6u6xsrki4y7b9jus/branch/master?svg=true)](https://ci.appveyor.com/project/AchimTuran/adsp-freesurround/branch/master)
 * Code analyses for Linux [![Coverity Scan Build Status](https://scan.coverity.com/projects/5120/badge.svg)](https://scan.coverity.com/projects/5120)
 
 # FreeSurround AudioDSP add-on for [Kodi] (http://kodi.tv)
 *<p align="center">![alt tag](https://github.com/kodi-adsp/adsp.freesurround/blob/master/adsp.freesurround/icon.png)</p>*
 
-*Is based on foo_dsp_fsurround from pro_optimizer on foobar2000 0.9.x.*
-*URL:* http://www.hydrogenaud.io/forums/index.php?showtopic=52235
+*FreeSurround is based on [foo_dsp_fsurround](http://www.hydrogenaud.io/forums/index.php?showtopic=52235) from pro_optimizer for foobar2000 0.9.x.*
 
-FreeSurround is meant to be the KODI equivalent of your hi-fi receiver's Dolby ProLogic II button (except that it uses a
-different algorithm).
+This add-on is the equivalent of your hi-fi receiver's Dolby ProLogic II button (except that it uses a
+different algorithm) for Kodi.
 
 It's purpose is to decode surround information from your stereo music (including mp3) to produce
 multichannel output.
@@ -27,7 +26,7 @@ It works with any stereo music containing surround information like the followin
 - Stereo Quadrophonic (SQ)
 - Quadrophonic Stereo (QS)
 
-## Chnage LFE output settings
+## Change LFE output settings
 Currently you have to edit the generated "ADSPFreeSurrAddonSettings.xml" changed by hand to edit the cut off frequencies of the LFE channel.
 Set `bassredirection` to `true` and change the settings. E.g.
 ```XML
