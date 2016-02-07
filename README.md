@@ -1,24 +1,21 @@
-[![Linux Build Status](https://travis-ci.org/kodi-adsp/adsp.freesurround.svg?branch=master)](https://travis-ci.org/kodi-adsp/adsp.freesurround)
+#### CI Testing
+* Tarvis-CI for OS X, iOS, Linux [![Build Status](https://travis-ci.org/kodi-adsp/adsp.freesurround.svg?branch=master)](https://travis-ci.org/kodi-adsp/adsp.freesurround)
+* AppVeyor for Windows [![Build status][![Build status](https://ci.appveyor.com/api/projects/status/6u6xsrki4y7b9jus/branch/master?svg=true)](https://ci.appveyor.com/project/AchimTuran/adsp-freesurround/branch/master)
+* Code analyses for Linux [![Coverity Scan Build Status](https://scan.coverity.com/projects/5120/badge.svg)](https://scan.coverity.com/projects/5120)
 
-### adsp.freesurround
--------------
+# FreeSurround AudioDSP add-on for [Kodi] (http://kodi.tv)
 *<p align="center">![alt tag](https://github.com/kodi-adsp/adsp.freesurround/blob/master/adsp.freesurround/icon.png)</p>*
-*<p align="center">FreeSurround ADSP-Addon for KODI</p>*
--------------
-*<p align="center">http://kodi.tv</p>*
--------------
 
--------------
 *Is based on foo_dsp_fsurround from pro_optimizer on foobar2000 0.9.x.*
 *URL:* http://www.hydrogenaud.io/forums/index.php?showtopic=52235
 
 FreeSurround is meant to be the KODI equivalent of your hi-fi receiver's Dolby ProLogic II button (except that it uses a
 different algorithm).
 
-It's purpose is to decode surround information from your stereo music (including mp3, of course), and to produce
-multichannel output from it. 
+It's purpose is to decode surround information from your stereo music (including mp3) to produce
+multichannel output.
 
-It works with any stereo music containing surround info in a coding scheme compatible with any the following decoders:
+It works with any stereo music containing surround information like the following compatible  coding schemes:
 
 - Dolby Surround
 - Dolby ProLogic
@@ -30,16 +27,55 @@ It works with any stereo music containing surround info in a coding scheme compa
 - Stereo Quadrophonic (SQ)
 - Quadrophonic Stereo (QS)
 
--------------
-To enable LFE channel output from add-on, must be after first start generated "ADSPFreeSurrAddonSettings.xml" changed by hand.
-There are the following values (set to true and also the cut off frequencies can be changed):
+## Chnage LFE output settings
+Currently you have to edit the generated "ADSPFreeSurrAddonSettings.xml" changed by hand to edit the cut off frequencies of the LFE channel.
+Set `bassredirection` to `true` and change the settings. E.g.
 ```XML
-        <bassredirection>false</bassredirection>
+        <bassredirection>true</bassredirection>
         <lowcutoff>40.000000</lowcutoff>
         <highcutoff>90.000000</highcutoff>
 ```
-Thats normally part of DSP system post process thats why it is not selectable on skin!
+Normally it's a part of the AudioDSP post processing system that's why it is not directly editable from a Kodi window!
+
+## Build instructions for Kodi's binary add-ons
+
+When building the addon you have to use the correct branch depending on which version of Kodi you're building against. 
+For example, if you're building the `Jarvis` branch of Kodi you should checkout the `Jarvis` branch of this repository. 
+Addon releases are also tagged regularly.
+
+For further instructions replace `{addon-id}` and `{org}` with the repository- and the Github organisation-name.
+E.g. `https://github.com/kodi-adsp/adsp.basic.git` results in `{addon-id}=adsp.basic` and `{org}=kodi-adsp`
+
+With the following instructions the add-on files will be placed in `../../xbmc/addons`. Consequently this adds a system add-on, which can be used direclty if you build Kodi from source.
+
+### Linux
+
+1. `git clone https://github.com/xbmc/xbmc.git`
+2. `git clone https://github.com/{org}/{addon-id}.git`
+3. `cd {addon-id} && mkdir build && cd build`
+4. `cmake -DADDONS_TO_BUILD={addon-id} -DADDON_SRC_PREFIX=../.. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=../../xbmc/addons -DPACKAGE_ZIP=1 ../../xbmc/project/cmake/addons`
+5. `make`
+
+### Windows
+
+Use the visual studio command line or run `call "%VS120COMNTOOLS%..\..\VC\bin\vcvars32.bat"`
+
+1. `git clone https://github.com/xbmc/xbmc.git`
+2. `git clone https://github.com/{org}/{addon-id}.git`
+3. `cd {addon-id} && mkdir build && cd build`
+4. `cmake -G "NMake Makefiles" -DADDONS_TO_BUILD={addon-id} -DADDON_SRC_PREFIX=../.. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=../../xbmc/addons -DPACKAGE_ZIP=1 ../../xbmc/project/cmake/addons`
+5. `cmake --build "%cd%" --target "{addon-id}"`
+
+
+## Useful links
+
+* [Kodi's PVR user support] (http://forum.kodi.tv/forumdisplay.php?fid=167)
+* [General binary add-on development] (http://forum.kodi.tv/forumdisplay.php?fid=26)
+* [Kodi Core development support] (http://forum.kodi.tv/forumdisplay.php?fid=93)
+* [Kodi AudioDSP development support] (http://forum.kodi.tv/forumdisplay.php?fid=235)
+* [Kodi Screensavers and Visualisations development support] (http://forum.kodi.tv/forumdisplay.php?fid=38)
+* [Kodi PVR development support] (http://forum.kodi.tv/forumdisplay.php?fid=136)
 
 -------------
-### License
+#### License
 [GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007](https://github.com/kodi-adsp/adsp.freesurround/blob/master/LICENSE.md)
