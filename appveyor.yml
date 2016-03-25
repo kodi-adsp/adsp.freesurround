@@ -71,7 +71,7 @@ build_script:
   - cd "%addon_id%"
   - mkdir build 
   - cd build
-  - cmake -G "NMake Makefiles" -DADDONS_TO_BUILD="%addon_id%" -DCMAKE_BUILD_TYPE="%CONFIG%" -DADDON_SRC_PREFIX="../.." -DCMAKE_INSTALL_PREFIX="../../xbmc/addons" -DPACKAGE_ZIP=1 "../../xbmc/project/cmake/addons"
+  - cmake -G "NMake Makefiles" -DADDONS_TO_BUILD="%addon_id%" -DCMAKE_BUILD_TYPE="%CONFIG%" -DADDON_SRC_PREFIX="../../../.." -DCMAKE_INSTALL_PREFIX="../../xbmc/addons" -DPACKAGE_ZIP=1 "../../xbmc/project/cmake/addons"
   - cmake --build "%cd%" --target "%addon_id%"
   
   # use this commands for zip package creation, which can be used to upload it
