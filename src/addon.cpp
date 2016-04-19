@@ -17,17 +17,20 @@
  *
  */
 
-#include <vector>
-#include <string>
 #include "addon.h"
-#include "kodi/kodi_adsp_dll.h"
-#include "p8-platform/util/util.h"
-#include "p8-platform/util/StdString.h"
 #include "GUIDialogFreeSurround.h"
 #include "DSPProcessFreeSurround.h"
 
+#include "kodi/kodi_adsp_dll.h"
+#include <kodi/api2/AddonLib.hpp>
+#include <kodi/api2/addon/General.hpp>
+#include <kodi/api2/addon/VFSUtils.hpp>
+#include <kodi/api2/audioengine/General.hpp>
+#include "p8-platform/util/util.h"
+#include <vector>
+#include <string>
+
 using namespace std;
-using namespace ADDON;
 
 #ifdef TARGET_WINDOWS
 #define snprintf _snprintf
@@ -46,9 +49,6 @@ using namespace ADDON;
  */
 std::string               g_strUserPath   = "";
 std::string               g_strAddonPath  = "";
-CHelper_libXBMC_addon    *KODI            = NULL;
-CHelper_libKODI_adsp     *ADSP            = NULL;
-CHelper_libKODI_guilib   *GUI             = NULL;
 ADDON_STATUS              m_CurStatus     = ADDON_STATUS_UNKNOWN;
 AE_DSP_MENUHOOK           m_MenuHook;
 CDSPProcess_FreeSurround *g_usedDSPs[AE_DSP_STREAM_MAX_STREAMS];
@@ -67,40 +67,22 @@ ADDON_STATUS ADDON_Create(void* hdl, void* props)
 
   AE_DSP_PROPERTIES* adspprops = (AE_DSP_PROPERTIES*)props;
 
-  KODI = new CHelper_libXBMC_addon;
-  if (!KODI->RegisterMe(hdl))
+  if (KodiAPI::InitLibAddon(hdl) != API_SUCCESS)
   {
-    SAFE_DELETE(KODI);
+    fprintf(stderr, "adsp.freesurround InitLibAddon failed with %s\n", KodiAPI_ErrorCodeToString(KODI_API_lasterror));
     return ADDON_STATUS_PERMANENT_FAILURE;
   }
 
-  GUI = new CHelper_libKODI_guilib;
-  if (!GUI->RegisterMe(hdl))
-  {
-    SAFE_DELETE(GUI);
-    SAFE_DELETE(KODI);
-    return ADDON_STATUS_PERMANENT_FAILURE;
-  }
-
-  ADSP = new CHelper_libKODI_adsp;
-  if (!ADSP->RegisterMe(hdl))
-  {
-    SAFE_DELETE(ADSP);
-    SAFE_DELETE(GUI);
-    SAFE_DELETE(KODI);
-    return ADDON_STATUS_PERMANENT_FAILURE;
-  }
-
-  KODI->Log(LOG_DEBUG, "%s - Creating the Audio DSP free surround add-on", __FUNCTION__);
+  KodiAPI::Log(ADDON_LOG_DEBUG, "%s - Creating the Audio DSP free surround add-on", __FUNCTION__);
 
   m_CurStatus     = ADDON_STATUS_UNKNOWN;
   g_strUserPath   = adspprops->strUserPath;
   g_strAddonPath  = adspprops->strAddonPath;
 
   // create addon user path
-  if (!KODI->DirectoryExists(g_strUserPath.c_str()))
+  if (!KodiAPI::AddOn::VFSUtils::DirectoryExists(g_strUserPath.c_str()))
   {
-    KODI->CreateDirectory(g_strUserPath.c_str());
+    KodiAPI::AddOn::VFSUtils::CreateDirectory(g_strUserPath.c_str());
   }
 
   for (int i = 0; i < AE_DSP_STREAM_MAX_STREAMS; ++i)
@@ -127,14 +109,14 @@ ADDON_STATUS ADDON_Create(void* hdl, void* props)
   imagePath += "/resources/skins/Confluence/media/adsp-freesurround.png";
   strncpy(m_ModeInfoStruct.strOwnModeImage, imagePath.c_str(), sizeof(m_ModeInfoStruct.strOwnModeImage) - 1);
   memset(m_ModeInfoStruct.strOverrideModeImage, 0, sizeof(m_ModeInfoStruct.strOwnModeImage)); // unused
-  ADSP->RegisterMode(&m_ModeInfoStruct);
+  KodiAPI::AudioEngine::General::RegisterDSPMode(&m_ModeInfoStruct);
 
   m_MenuHook.iHookId                      = ID_MASTER_PROCESS_FREE_SURROUND;
   m_MenuHook.category                     = AE_DSP_MENUHOOK_MASTER_PROCESS;
   m_MenuHook.iLocalizedStringId           = 30001;
   m_MenuHook.iRelevantModeId              = ID_MASTER_PROCESS_FREE_SURROUND;
   m_MenuHook.bNeedPlayback                = true;
-  ADSP->AddMenuHook(&m_MenuHook);
+  KodiAPI::AudioEngine::General::AddDSPMenuHook(&m_MenuHook);
 
   m_CurStatus = ADDON_STATUS_OK;
 
@@ -151,9 +133,7 @@ void ADDON_Destroy()
   for (int i = 0; i < AE_DSP_STREAM_MAX_STREAMS; ++i)
     SAFE_DELETE(g_usedDSPs[i]);
 
-  SAFE_DELETE(ADSP);
-  SAFE_DELETE(GUI);
-  SAFE_DELETE(KODI);
+  KodiAPI::Finalize();
 
   m_CurStatus = ADDON_STATUS_UNKNOWN;
 }

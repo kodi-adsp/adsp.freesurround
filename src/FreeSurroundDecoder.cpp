@@ -26,10 +26,7 @@
 
 #include <cmath>
 #include <vector>
-
-#if defined(TARGET_WINDOWS)
-  #include <algorithm>
-#endif
+#include <algorithm>
 
 #include "FreeSurroundDecoder.h"
 

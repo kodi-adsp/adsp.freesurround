@@ -18,40 +18,30 @@
  *
  */
 
-#include "p8-platform/util/StdString.h"
 #include "addon.h"
 #include "FreeSurroundSettings.h"
 
-class CGUIDialogFreeSurround : private CDSPSettings
+#include <kodi/api2/gui/Window.hpp>
+#include <kodi/api2/gui/ControlSettingsSlider.hpp>
+
+class CGUIDialogFreeSurround : private CDSPSettings, public KodiAPI::GUI::CWindow
 {
 public:
   CGUIDialogFreeSurround(unsigned int streamId);
-  virtual ~CGUIDialogFreeSurround();
-
-  bool Show();
-  void Close();
-  void DoModal();
 
 private:
-  bool OnClick(int controlId);
-  bool OnFocus(int controlId);
-  bool OnInit();
-  bool OnAction(int actionId);
+  virtual bool OnClick(int controlId) override;
+  virtual bool OnFocus(int controlId) override;
+  virtual bool OnInit() override;
+  virtual bool OnAction(int actionId) override;
 
-  static bool OnClickCB(GUIHANDLE cbhdl, int controlId);
-  static bool OnFocusCB(GUIHANDLE cbhdl, int controlId);
-  static bool OnInitCB(GUIHANDLE cbhdl);
-  static bool OnActionCB(GUIHANDLE cbhdl, int actionId);
+  const unsigned int m_StreamId;
 
-  const unsigned int               m_StreamId;
-
-  CAddonGUISettingsSliderControl  *m_CircularWrap;
-  CAddonGUISettingsSliderControl  *m_Shift;
-  CAddonGUISettingsSliderControl  *m_Depth;
-  CAddonGUISettingsSliderControl  *m_Focus;
-  CAddonGUISettingsSliderControl  *m_CenterImage;
-  CAddonGUISettingsSliderControl  *m_FrontSeparation;
-  CAddonGUISettingsSliderControl  *m_RearSeparation;
-
-  CAddonGUIWindow                 *m_window;
+  KodiAPI::GUI::CControlSettingsSlider  *m_CircularWrap;
+  KodiAPI::GUI::CControlSettingsSlider  *m_Shift;
+  KodiAPI::GUI::CControlSettingsSlider  *m_Depth;
+  KodiAPI::GUI::CControlSettingsSlider  *m_Focus;
+  KodiAPI::GUI::CControlSettingsSlider  *m_CenterImage;
+  KodiAPI::GUI::CControlSettingsSlider  *m_FrontSeparation;
+  KodiAPI::GUI::CControlSettingsSlider  *m_RearSeparation;
 };

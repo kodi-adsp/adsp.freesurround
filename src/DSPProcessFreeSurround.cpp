@@ -22,10 +22,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "kodi/libXBMC_addon.h"
-#include "kodi/libKODI_adsp.h"
-#include "p8-platform/util/StdString.h"
-
 #include "addon.h"
 #include "DSPProcessFreeSurround.h"
 #include "FreeSurroundSettings.h"

@@ -21,8 +21,6 @@
 #include <string>
 #include <vector>
 
-#include "addon.h"
-
 struct sSettings
 {
   float fInputGain;
