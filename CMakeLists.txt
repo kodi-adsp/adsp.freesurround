@@ -6,6 +6,8 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR})
 
 enable_language(CXX)
 
+set(USE_KODI_API_LEVEL 2)
+
 find_package(kodi REQUIRED)
 find_package(kodiplatform REQUIRED)
 find_package(p8-platform REQUIRED)
@@ -24,7 +26,8 @@ set(FREESURROUND_SOURCES src/addon.cpp
                          src/FreeSurroundDecoder.cpp)
 
 set(DEPLIBS ${kodiplatform_LIBRARIES}
-            ${p8-platform_LIBRARIES})
+            ${p8-platform_LIBRARIES}
+            ${kodi-addon-sharedlibrary_LIBRARIES})
 
 build_addon(adsp.freesurround FREESURROUND DEPLIBS)
 

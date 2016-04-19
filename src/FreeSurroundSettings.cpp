@@ -17,17 +17,12 @@
  *
  */
 
-#include "kodi/libXBMC_addon.h"
-#include "kodi/libKODI_adsp.h"
-#include "kodi/libKODI_guilib.h"
-
+#include <kodi/api2/AddonLib.hpp>
 #include "kodi/util/XMLUtils.h"
 #include "p8-platform/util/util.h"
-#include "p8-platform/util/StdString.h"
 
+#include "addon.h"
 #include "FreeSurroundSettings.h"
-
-using namespace ADDON;
 
 std::string GetSettingsFile()
 {
@@ -70,13 +65,13 @@ bool CDSPSettings::LoadSettingsData(bool initial /* = false */)
     {
       if (!SaveSettingsData())
       {
-        KODI->Log(LOG_ERROR, "failed to create initial settings data file at '%s')", strSettingsFile.c_str());
+        KodiAPI::Log(ADDON_LOG_ERROR, "failed to create initial settings data file at '%s')", strSettingsFile.c_str());
         return false;
       }
       return true;
     }
     else
-      KODI->Log(LOG_ERROR, "invalid settings data (no/invalid data file found at '%s')", strSettingsFile.c_str());
+      KodiAPI::Log(ADDON_LOG_ERROR, "invalid settings data (no/invalid data file found at '%s')", strSettingsFile.c_str());
     return false;
   }
 
@@ -84,7 +79,7 @@ bool CDSPSettings::LoadSettingsData(bool initial /* = false */)
   if (strcmp(pRootElement->Value(), "freesurround") != 0)
   {
     if (!initial)
-      KODI->Log(LOG_ERROR, "invalid settings data (no <circlesurround2> tag found)");
+      KodiAPI::Log(ADDON_LOG_ERROR, "invalid settings data (no <circlesurround2> tag found)");
     return false;
   }
 
@@ -143,7 +138,7 @@ bool CDSPSettings::SaveSettingsData()
 
   if (!xmlDoc.SaveFile(GetSettingsFile()))
   {
-    KODI->Log(LOG_ERROR, "failed to write circle surround 2 settings data");
+    KodiAPI::Log(ADDON_LOG_ERROR, "failed to write circle surround 2 settings data");
     return false;
   }
 
