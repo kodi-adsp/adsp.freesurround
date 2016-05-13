@@ -18,9 +18,9 @@
  *
  */
 
-#include "kodi/libXBMC_addon.h"
-#include "kodi/libKODI_adsp.h"
-#include "kodi/libKODI_guilib.h"
+#include "libXBMC_addon.h"
+#include "libKODI_adsp.h"
+#include "libKODI_guilib.h"
 
 class CDSPProcess_FreeSurround;
 

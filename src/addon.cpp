@@ -20,7 +20,7 @@
 #include <vector>
 #include <string>
 #include "addon.h"
-#include "kodi/kodi_adsp_dll.h"
+#include "kodi_adsp_dll.h"
 #include "p8-platform/util/util.h"
 #include "p8-platform/util/StdString.h"
 #include "GUIDialogFreeSurround.h"
