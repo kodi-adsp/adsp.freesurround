@@ -54,7 +54,7 @@ CGUIDialogFreeSurround::CGUIDialogFreeSurround(unsigned int streamId)
     m_RearSeparation(NULL),
     m_window(NULL)
 {
-  m_window              = GUI->Window_create("DialogMasterModeFreeSurround.xml", "Confluence", false, true);
+  m_window              = GUI->Window_create("DialogMasterModeFreeSurround.xml", "skin.estuary", false, true);
   m_window->m_cbhdl     = this;
   m_window->CBOnInit    = OnInitCB;
   m_window->CBOnFocus   = OnFocusCB;
