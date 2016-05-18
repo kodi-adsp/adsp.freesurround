@@ -1,2 +1,7 @@
+0.3.0 (2016-05-18)
+- fix includes
+- cmake: rename find_package kodi to Kodi
+- rename addon.xml to addon.xml.in
+
 0.1.0 (2015-04-12)
 - initial version
