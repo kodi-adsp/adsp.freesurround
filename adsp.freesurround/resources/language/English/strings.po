@@ -72,3 +72,11 @@ msgstr ""
 msgctxt "#30020"
 msgid "Dimension - Front / Back shift"
 msgstr ""
+
+msgctxt "#30021"
+msgid "Dimension\nFront / Back shift"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Focus\nAmbience <-> localization"
+msgstr ""
