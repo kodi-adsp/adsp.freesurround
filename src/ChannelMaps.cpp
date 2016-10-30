@@ -2854,25 +2854,49 @@ bool init_maps() {
     chn_alloc[cs_5stereo].push_back(std::vector<float*>(&map_5stereo_rcf[0],&map_5stereo_rcf[21]));
     chn_alloc[cs_5stereo].push_back(std::vector<float*>(&map_5stereo_rf[0],&map_5stereo_rf[21]));
     chn_alloc[cs_5stereo].push_back(std::vector<float*>(&map_lfe_lfe[0],&map_lfe_lfe[21]));
-    chn_angle[cs_4point1] = std::vector<float>(&map_4point1_ang[0],&map_4point1_ang[sizeof(map_4point1_ang)/sizeof(map_4point1_ang[0])]);
-    chn_xsf[cs_4point1] = std::vector<float>(&map_4point1_xsf[0],&map_4point1_xsf[sizeof(map_4point1_xsf)/sizeof(map_4point1_xsf[0])]);
-    chn_ysf[cs_4point1] = std::vector<float>(&map_4point1_ysf[0],&map_4point1_ysf[sizeof(map_4point1_ysf)/sizeof(map_4point1_ysf[0])]);
-    chn_id[cs_4point1] = std::vector<AE_DSP_CHANNEL_PRESENT>(&map_4point1_id[0],&map_4point1_id[sizeof(map_4point1_id)/sizeof(map_4point1_id[0])]);
-    chn_alloc[cs_4point1].push_back(std::vector<float*>(&map_4point1_lf[0],&map_4point1_lf[21]));
-    chn_alloc[cs_4point1].push_back(std::vector<float*>(&map_4point1_rf[0],&map_4point1_rf[21]));
-    chn_alloc[cs_4point1].push_back(std::vector<float*>(&map_4point1_ls[0],&map_4point1_ls[21]));
-    chn_alloc[cs_4point1].push_back(std::vector<float*>(&map_4point1_rs[0],&map_4point1_rs[21]));
-    chn_alloc[cs_4point1].push_back(std::vector<float*>(&map_lfe_lfe[0],&map_lfe_lfe[21]));
-    chn_angle[cs_5point1] = std::vector<float>(&map_5point1_ang[0],&map_5point1_ang[sizeof(map_5point1_ang)/sizeof(map_5point1_ang[0])]);
-    chn_xsf[cs_5point1] = std::vector<float>(&map_5point1_xsf[0],&map_5point1_xsf[sizeof(map_5point1_xsf)/sizeof(map_5point1_xsf[0])]);
-    chn_ysf[cs_5point1] = std::vector<float>(&map_5point1_ysf[0],&map_5point1_ysf[sizeof(map_5point1_ysf)/sizeof(map_5point1_ysf[0])]);
-    chn_id[cs_5point1] = std::vector<AE_DSP_CHANNEL_PRESENT>(&map_5point1_id[0],&map_5point1_id[sizeof(map_5point1_id)/sizeof(map_5point1_id[0])]);
-    chn_alloc[cs_5point1].push_back(std::vector<float*>(&map_5point1_lf[0],&map_5point1_lf[21]));
-    chn_alloc[cs_5point1].push_back(std::vector<float*>(&map_5point1_cf[0],&map_5point1_cf[21]));
-    chn_alloc[cs_5point1].push_back(std::vector<float*>(&map_5point1_rf[0],&map_5point1_rf[21]));
-    chn_alloc[cs_5point1].push_back(std::vector<float*>(&map_5point1_ls[0],&map_5point1_ls[21]));
-    chn_alloc[cs_5point1].push_back(std::vector<float*>(&map_5point1_rs[0],&map_5point1_rs[21]));
-    chn_alloc[cs_5point1].push_back(std::vector<float*>(&map_lfe_lfe[0],&map_lfe_lfe[21]));
+
+    chn_angle[cs_4point1_Side] = std::vector<float>(&map_4point1_ang[0],&map_4point1_ang[sizeof(map_4point1_ang)/sizeof(map_4point1_ang[0])]);
+    chn_xsf[cs_4point1_Side] = std::vector<float>(&map_4point1_xsf[0],&map_4point1_xsf[sizeof(map_4point1_xsf)/sizeof(map_4point1_xsf[0])]);
+    chn_ysf[cs_4point1_Side] = std::vector<float>(&map_4point1_ysf[0],&map_4point1_ysf[sizeof(map_4point1_ysf)/sizeof(map_4point1_ysf[0])]);
+    chn_id[cs_4point1_Side] = std::vector<AE_DSP_CHANNEL_PRESENT>(&map_4point1_id[0],&map_4point1_id[sizeof(map_4point1_id)/sizeof(map_4point1_id[0])]);
+    chn_alloc[cs_4point1_Side].push_back(std::vector<float*>(&map_4point1_lf[0],&map_4point1_lf[21]));
+    chn_alloc[cs_4point1_Side].push_back(std::vector<float*>(&map_4point1_rf[0],&map_4point1_rf[21]));
+    chn_alloc[cs_4point1_Side].push_back(std::vector<float*>(&map_4point1_ls[0],&map_4point1_ls[21]));
+    chn_alloc[cs_4point1_Side].push_back(std::vector<float*>(&map_4point1_rs[0],&map_4point1_rs[21]));
+    chn_alloc[cs_4point1_Side].push_back(std::vector<float*>(&map_lfe_lfe[0],&map_lfe_lfe[21]));
+
+    chn_angle[cs_4point1_Back] = std::vector<float>(&map_4point1_ang[0],&map_4point1_ang[sizeof(map_4point1_ang)/sizeof(map_4point1_ang[0])]);
+    chn_xsf[cs_4point1_Back] = std::vector<float>(&map_4point1_xsf[0],&map_4point1_xsf[sizeof(map_4point1_xsf)/sizeof(map_4point1_xsf[0])]);
+    chn_ysf[cs_4point1_Back] = std::vector<float>(&map_4point1_ysf[0],&map_4point1_ysf[sizeof(map_4point1_ysf)/sizeof(map_4point1_ysf[0])]);
+    chn_id[cs_4point1_Back] = std::vector<AE_DSP_CHANNEL_PRESENT>(&map_4point1_id[0],&map_4point1_id[sizeof(map_4point1_id)/sizeof(map_4point1_id[0])]);
+    chn_alloc[cs_4point1_Back].push_back(std::vector<float*>(&map_4point1_lf[0],&map_4point1_lf[21]));
+    chn_alloc[cs_4point1_Back].push_back(std::vector<float*>(&map_4point1_rf[0],&map_4point1_rf[21]));
+    chn_alloc[cs_4point1_Back].push_back(std::vector<float*>(&map_4point1_ls[0],&map_4point1_ls[21]));
+    chn_alloc[cs_4point1_Back].push_back(std::vector<float*>(&map_4point1_rs[0],&map_4point1_rs[21]));
+    chn_alloc[cs_4point1_Back].push_back(std::vector<float*>(&map_lfe_lfe[0],&map_lfe_lfe[21]));
+
+    chn_angle[cs_5point1_Side] = std::vector<float>(&map_5point1_ang[0],&map_5point1_ang[sizeof(map_5point1_ang)/sizeof(map_5point1_ang[0])]);
+    chn_xsf[cs_5point1_Side] = std::vector<float>(&map_5point1_xsf[0],&map_5point1_xsf[sizeof(map_5point1_xsf)/sizeof(map_5point1_xsf[0])]);
+    chn_ysf[cs_5point1_Side] = std::vector<float>(&map_5point1_ysf[0],&map_5point1_ysf[sizeof(map_5point1_ysf)/sizeof(map_5point1_ysf[0])]);
+    chn_id[cs_5point1_Side] = std::vector<AE_DSP_CHANNEL_PRESENT>(&map_5point1_id[0],&map_5point1_id[sizeof(map_5point1_id)/sizeof(map_5point1_id[0])]);
+    chn_alloc[cs_5point1_Side].push_back(std::vector<float*>(&map_5point1_lf[0],&map_5point1_lf[21]));
+    chn_alloc[cs_5point1_Side].push_back(std::vector<float*>(&map_5point1_cf[0],&map_5point1_cf[21]));
+    chn_alloc[cs_5point1_Side].push_back(std::vector<float*>(&map_5point1_rf[0],&map_5point1_rf[21]));
+    chn_alloc[cs_5point1_Side].push_back(std::vector<float*>(&map_5point1_ls[0],&map_5point1_ls[21]));
+    chn_alloc[cs_5point1_Side].push_back(std::vector<float*>(&map_5point1_rs[0],&map_5point1_rs[21]));
+    chn_alloc[cs_5point1_Side].push_back(std::vector<float*>(&map_lfe_lfe[0],&map_lfe_lfe[21]));
+
+    chn_angle[cs_5point1_Back] = std::vector<float>(&map_5point1_ang[0],&map_5point1_ang[sizeof(map_5point1_ang)/sizeof(map_5point1_ang[0])]);
+    chn_xsf[cs_5point1_Back] = std::vector<float>(&map_5point1_xsf[0],&map_5point1_xsf[sizeof(map_5point1_xsf)/sizeof(map_5point1_xsf[0])]);
+    chn_ysf[cs_5point1_Back] = std::vector<float>(&map_5point1_ysf[0],&map_5point1_ysf[sizeof(map_5point1_ysf)/sizeof(map_5point1_ysf[0])]);
+    chn_id[cs_5point1_Back] = std::vector<AE_DSP_CHANNEL_PRESENT>(&map_5point1_id[0],&map_5point1_id[sizeof(map_5point1_id)/sizeof(map_5point1_id[0])]);
+    chn_alloc[cs_5point1_Back].push_back(std::vector<float*>(&map_5point1_lf[0],&map_5point1_lf[21]));
+    chn_alloc[cs_5point1_Back].push_back(std::vector<float*>(&map_5point1_cf[0],&map_5point1_cf[21]));
+    chn_alloc[cs_5point1_Back].push_back(std::vector<float*>(&map_5point1_rf[0],&map_5point1_rf[21]));
+    chn_alloc[cs_5point1_Back].push_back(std::vector<float*>(&map_5point1_ls[0],&map_5point1_ls[21]));
+    chn_alloc[cs_5point1_Back].push_back(std::vector<float*>(&map_5point1_rs[0],&map_5point1_rs[21]));
+    chn_alloc[cs_5point1_Back].push_back(std::vector<float*>(&map_lfe_lfe[0],&map_lfe_lfe[21]));
+
     chn_angle[cs_6point1] = std::vector<float>(&map_6point1_ang[0],&map_6point1_ang[sizeof(map_6point1_ang)/sizeof(map_6point1_ang[0])]);
     chn_xsf[cs_6point1] = std::vector<float>(&map_6point1_xsf[0],&map_6point1_xsf[sizeof(map_6point1_xsf)/sizeof(map_6point1_xsf[0])]);
     chn_ysf[cs_6point1] = std::vector<float>(&map_6point1_ysf[0],&map_6point1_ysf[sizeof(map_6point1_ysf)/sizeof(map_6point1_ysf[0])]);
