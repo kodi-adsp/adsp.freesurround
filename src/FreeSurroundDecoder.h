@@ -39,8 +39,10 @@ typedef enum {
   cs_stereo = AE_DSP_PRSNT_CH_FL | AE_DSP_PRSNT_CH_FR | AE_DSP_PRSNT_CH_LFE,
   cs_3stereo = AE_DSP_PRSNT_CH_FL | AE_DSP_PRSNT_CH_FC | AE_DSP_PRSNT_CH_FR | AE_DSP_PRSNT_CH_LFE,
   cs_5stereo = AE_DSP_PRSNT_CH_FL | AE_DSP_PRSNT_CH_FLOC | AE_DSP_PRSNT_CH_FC | AE_DSP_PRSNT_CH_FROC | AE_DSP_PRSNT_CH_FR | AE_DSP_PRSNT_CH_LFE,
-  cs_4point1 = AE_DSP_PRSNT_CH_FL | AE_DSP_PRSNT_CH_FR | AE_DSP_PRSNT_CH_SL | AE_DSP_PRSNT_CH_SR | AE_DSP_PRSNT_CH_LFE,
-  cs_5point1 = AE_DSP_PRSNT_CH_FL | AE_DSP_PRSNT_CH_FC | AE_DSP_PRSNT_CH_FR | AE_DSP_PRSNT_CH_SL | AE_DSP_PRSNT_CH_SR | AE_DSP_PRSNT_CH_LFE,
+  cs_4point1_Side = AE_DSP_PRSNT_CH_FL | AE_DSP_PRSNT_CH_FR | AE_DSP_PRSNT_CH_SL | AE_DSP_PRSNT_CH_SR | AE_DSP_PRSNT_CH_LFE,
+  cs_4point1_Back = AE_DSP_PRSNT_CH_FL | AE_DSP_PRSNT_CH_FR | AE_DSP_PRSNT_CH_BL | AE_DSP_PRSNT_CH_BR | AE_DSP_PRSNT_CH_LFE,
+  cs_5point1_Side = AE_DSP_PRSNT_CH_FL | AE_DSP_PRSNT_CH_FC | AE_DSP_PRSNT_CH_FR | AE_DSP_PRSNT_CH_SL | AE_DSP_PRSNT_CH_SR | AE_DSP_PRSNT_CH_LFE,
+  cs_5point1_Back = AE_DSP_PRSNT_CH_FL | AE_DSP_PRSNT_CH_FC | AE_DSP_PRSNT_CH_FR | AE_DSP_PRSNT_CH_BL | AE_DSP_PRSNT_CH_BR | AE_DSP_PRSNT_CH_LFE,
   cs_6point1 = AE_DSP_PRSNT_CH_FL | AE_DSP_PRSNT_CH_FC | AE_DSP_PRSNT_CH_FR | AE_DSP_PRSNT_CH_SL | AE_DSP_PRSNT_CH_SR | AE_DSP_PRSNT_CH_BC | AE_DSP_PRSNT_CH_LFE,
   cs_7point1 = AE_DSP_PRSNT_CH_FL | AE_DSP_PRSNT_CH_FC | AE_DSP_PRSNT_CH_FR | AE_DSP_PRSNT_CH_SL | AE_DSP_PRSNT_CH_SR | AE_DSP_PRSNT_CH_BL | AE_DSP_PRSNT_CH_BR | AE_DSP_PRSNT_CH_LFE,
   cs_7point1_panorama = AE_DSP_PRSNT_CH_FL | AE_DSP_PRSNT_CH_FLOC | AE_DSP_PRSNT_CH_FC | AE_DSP_PRSNT_CH_FROC | AE_DSP_PRSNT_CH_FR |
@@ -83,7 +85,7 @@ public:
    *           than 5ms to 20ms since the granularity at which locations are decoded
    *           changes with this.
    */
-  CFreeSurroundDecoder(channel_setup setup=cs_5point1, unsigned blocksize=4096, unsigned int samplerate=48000);
+  CFreeSurroundDecoder(channel_setup setup=cs_5point1_Side, unsigned blocksize=4096, unsigned int samplerate=48000);
   ~CFreeSurroundDecoder();
 
   float ** getOutputBuffers();

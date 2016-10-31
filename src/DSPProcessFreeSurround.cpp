@@ -207,7 +207,7 @@ unsigned int CDSPProcess_FreeSurround::StreamProcess(float **array_in, float **a
         array_out[AE_DSP_CH_LFE][pos]   = outputs[5][m_ProcessBufferPos];
         break;
       }
-      case cs_4point1:
+      case cs_4point1_Side:
       {
         array_out[AE_DSP_CH_FL][pos]    = outputs[0][m_ProcessBufferPos];
         array_out[AE_DSP_CH_FR][pos]    = outputs[1][m_ProcessBufferPos];
@@ -216,13 +216,32 @@ unsigned int CDSPProcess_FreeSurround::StreamProcess(float **array_in, float **a
         array_out[AE_DSP_CH_LFE][pos]   = outputs[4][m_ProcessBufferPos];
         break;
       }
-      case cs_5point1:
+      case cs_4point1_Back:
+      {
+        array_out[AE_DSP_CH_FL][pos]    = outputs[0][m_ProcessBufferPos];
+        array_out[AE_DSP_CH_FR][pos]    = outputs[1][m_ProcessBufferPos];
+        array_out[AE_DSP_CH_BL][pos]    = outputs[2][m_ProcessBufferPos];
+        array_out[AE_DSP_CH_BR][pos]    = outputs[3][m_ProcessBufferPos];
+        array_out[AE_DSP_CH_LFE][pos]   = outputs[4][m_ProcessBufferPos];
+        break;
+      }
+      case cs_5point1_Side:
       {
         array_out[AE_DSP_CH_FL][pos]    = outputs[0][m_ProcessBufferPos];
         array_out[AE_DSP_CH_FC][pos]    = outputs[1][m_ProcessBufferPos];
         array_out[AE_DSP_CH_FR][pos]    = outputs[2][m_ProcessBufferPos];
         array_out[AE_DSP_CH_SL][pos]    = outputs[3][m_ProcessBufferPos];
         array_out[AE_DSP_CH_SR][pos]    = outputs[4][m_ProcessBufferPos];
+        array_out[AE_DSP_CH_LFE][pos]   = outputs[5][m_ProcessBufferPos];
+        break;
+      }
+      case cs_5point1_Back:
+      {
+        array_out[AE_DSP_CH_FL][pos]    = outputs[0][m_ProcessBufferPos];
+        array_out[AE_DSP_CH_FC][pos]    = outputs[1][m_ProcessBufferPos];
+        array_out[AE_DSP_CH_FR][pos]    = outputs[2][m_ProcessBufferPos];
+        array_out[AE_DSP_CH_BL][pos]    = outputs[3][m_ProcessBufferPos];
+        array_out[AE_DSP_CH_BR][pos]    = outputs[4][m_ProcessBufferPos];
         array_out[AE_DSP_CH_LFE][pos]   = outputs[5][m_ProcessBufferPos];
         break;
       }
@@ -372,12 +391,18 @@ unsigned int CDSPProcess_FreeSurround::StreamProcess(float **array_in, float **a
       case cs_legacy:
       default:
       {
-        array_out[AE_DSP_CH_FL][pos]    = outputs[0][m_ProcessBufferPos];
-        array_out[AE_DSP_CH_FC][pos]    = outputs[1][m_ProcessBufferPos];
-        array_out[AE_DSP_CH_FR][pos]    = outputs[2][m_ProcessBufferPos];
-        array_out[AE_DSP_CH_BL][pos]    = outputs[3][m_ProcessBufferPos];
-        array_out[AE_DSP_CH_BR][pos]    = outputs[4][m_ProcessBufferPos];
-        array_out[AE_DSP_CH_LFE][pos]   = outputs[5][m_ProcessBufferPos];
+        if (array_out[AE_DSP_CH_FL])
+          array_out[AE_DSP_CH_FL][pos]  = outputs[0][m_ProcessBufferPos];
+        if (array_out[AE_DSP_CH_FC])
+          array_out[AE_DSP_CH_FC][pos]  = outputs[1][m_ProcessBufferPos];
+        if (array_out[AE_DSP_CH_FR])
+          array_out[AE_DSP_CH_FR][pos]  = outputs[2][m_ProcessBufferPos];
+        if (array_out[AE_DSP_CH_BL])
+          array_out[AE_DSP_CH_BL][pos]  = outputs[3][m_ProcessBufferPos];
+        if (array_out[AE_DSP_CH_BR])
+          array_out[AE_DSP_CH_BR][pos]  = outputs[4][m_ProcessBufferPos];
+        if (array_out[AE_DSP_CH_LFE])
+          array_out[AE_DSP_CH_LFE][pos] = outputs[5][m_ProcessBufferPos];
         break;
       }
     }
