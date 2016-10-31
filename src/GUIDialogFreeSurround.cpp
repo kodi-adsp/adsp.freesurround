@@ -40,6 +40,9 @@ using namespace ADDON;
 #define DSP_SETTING_FREESURROUND_FRONT_SEPARATION   45
 #define DSP_SETTING_FREESURROUND_REAR_SEPARATION    46
 #define DSP_SETTING_FREESURROUND_CENTER_IMAGE       47
+#define DSP_SETTING_FREESURROUND_LFE                48
+#define DSP_SETTING_FREESURROUND_LFE_LOW_CUTOFF     49
+#define DSP_SETTING_FREESURROUND_LFE_HIGH_CUTOFF    50
 
 #define ACTION_NAV_BACK                             92
 
@@ -52,6 +55,9 @@ CGUIDialogFreeSurround::CGUIDialogFreeSurround(unsigned int streamId)
     m_CenterImage(NULL),
     m_FrontSeparation(NULL),
     m_RearSeparation(NULL),
+    m_LFE(NULL),
+    m_LFE_LowCutoff(NULL),
+    m_LFE_HighCutoff(NULL),
     m_window(NULL)
 {
   m_window              = GUI->Window_create("DialogMasterModeFreeSurround.xml", "skin.estuary", false, true);
@@ -142,6 +148,19 @@ bool CGUIDialogFreeSurround::OnInit()
   m_RearSeparation = GUI->Control_getSettingsSlider(m_window, DSP_SETTING_FREESURROUND_REAR_SEPARATION);
   m_RearSeparation->SetFloatValue(m_Settings.fRearSeparation);
 
+  m_LFE = GUI->Control_getRadioButton(m_window, DSP_SETTING_FREESURROUND_LFE);
+  m_LFE->SetSelected(m_Settings.bLFE);
+
+  m_LFE_LowCutoff = GUI->Control_getSettingsSlider(m_window, DSP_SETTING_FREESURROUND_LFE_LOW_CUTOFF);
+  m_LFE_LowCutoff->SetIntRange(40.0f, 400.0f);
+  m_LFE_LowCutoff->SetIntInterval(10.0f);
+  m_LFE_LowCutoff->SetIntValue(m_Settings.fLowCutoff);
+
+  m_LFE_HighCutoff = GUI->Control_getSettingsSlider(m_window, DSP_SETTING_FREESURROUND_LFE_HIGH_CUTOFF);
+  m_LFE_HighCutoff->SetIntRange(60.0f, 1000.0f);
+  m_LFE_HighCutoff->SetIntInterval(10.0f);
+  m_LFE_HighCutoff->SetIntValue(m_Settings.fHighCutoff);
+
   return true;
 }
 
@@ -207,6 +226,30 @@ bool CGUIDialogFreeSurround::OnClick(int controlId)
         process->SetRearSeparation(m_Settings.fRearSeparation);
       break;
     }
+    case DSP_SETTING_FREESURROUND_LFE:
+    {
+      m_Settings.bLFE = m_LFE->IsSelected();
+      process = g_usedDSPs[m_StreamId];
+      if (process)
+        process->SetBassRedirection(m_Settings.bLFE);
+      break;
+    }
+    case DSP_SETTING_FREESURROUND_LFE_LOW_CUTOFF:
+    {
+      m_Settings.fLowCutoff = m_LFE_LowCutoff->GetIntValue();
+      process = g_usedDSPs[m_StreamId];
+      if (process)
+        process->SetLowCutoff(m_Settings.fLowCutoff);
+      break;
+    }
+    case DSP_SETTING_FREESURROUND_LFE_HIGH_CUTOFF:
+    {
+      m_Settings.fHighCutoff = m_LFE_HighCutoff->GetIntValue();
+      process = g_usedDSPs[m_StreamId];
+      if (process)
+        process->SetHighCutoff(m_Settings.fHighCutoff);
+      break;
+    }
     case BUTTON_OK:
       SaveSettingsData();
     case BUTTON_CANCEL:
@@ -225,6 +268,9 @@ bool CGUIDialogFreeSurround::OnClick(int controlId)
       GUI->Control_releaseSettingsSlider(m_CenterImage);
       GUI->Control_releaseSettingsSlider(m_FrontSeparation);
       GUI->Control_releaseSettingsSlider(m_RearSeparation);
+      GUI->Control_releaseRadioButton(m_LFE);
+      GUI->Control_releaseSettingsSlider(m_LFE_LowCutoff);
+      GUI->Control_releaseSettingsSlider(m_LFE_HighCutoff);
       break;
     }
     case BUTTON_DEFAULT:
@@ -237,6 +283,9 @@ bool CGUIDialogFreeSurround::OnClick(int controlId)
       m_Settings.fCenterImage            = defaultSettings.m_Settings.fCenterImage;
       m_Settings.fFrontSeparation        = defaultSettings.m_Settings.fFrontSeparation;
       m_Settings.fRearSeparation         = defaultSettings.m_Settings.fRearSeparation;
+      m_Settings.bLFE                    = defaultSettings.m_Settings.bLFE;
+      m_Settings.fLowCutoff              = defaultSettings.m_Settings.fLowCutoff;
+      m_Settings.fHighCutoff             = defaultSettings.m_Settings.fHighCutoff;
 
       m_CircularWrap->SetIntValue((int)m_Settings.fCircularWrap);
       m_Shift->SetFloatValue(m_Settings.fShift);
@@ -245,6 +294,9 @@ bool CGUIDialogFreeSurround::OnClick(int controlId)
       m_CenterImage->SetFloatValue(m_Settings.fCenterImage);
       m_FrontSeparation->SetFloatValue(m_Settings.fFrontSeparation);
       m_RearSeparation->SetFloatValue(m_Settings.fRearSeparation);
+      m_LFE->SetSelected(m_Settings.bLFE);
+      m_LFE_LowCutoff->SetIntValue(m_Settings.fLowCutoff);
+      m_LFE_HighCutoff->SetIntValue(m_Settings.fHighCutoff);
 
       process = g_usedDSPs[m_StreamId];
       if (process)
@@ -256,6 +308,9 @@ bool CGUIDialogFreeSurround::OnClick(int controlId)
         process->SetCenterImage(m_Settings.fCenterImage);
         process->SetFrontSeparation(m_Settings.fFrontSeparation);
         process->SetRearSeparation(m_Settings.fRearSeparation);
+        process->SetBassRedirection(m_Settings.bLFE);
+        process->SetLowCutoff(m_Settings.fLowCutoff);
+        process->SetHighCutoff(m_Settings.fHighCutoff);
       }
       break;
     }

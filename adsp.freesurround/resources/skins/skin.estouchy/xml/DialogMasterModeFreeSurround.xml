@@ -97,6 +97,35 @@
 				<reverse>yes</reverse>
 				<label>$ADDON[adsp.freesurround 30017]</label>
 			</control>
+			<control type="image" id="51">
+				<description>separator image</description>
+				<height>2</height>
+				<texture border="2">separator.png</texture>
+			</control>
+			<control type="radiobutton" id="48">
+				<description>LFE</description>
+				<height>70</height>
+				<font>font24</font>
+				<aligny>center</aligny>
+				<width>800</width>
+				<label>$ADDON[adsp.freesurround 30023]</label>
+			</control>
+			<control type="sliderex" id="49">
+				<description>LFE low freq</description>
+				<height>70</height>
+				<font>font24</font>
+				<aligny>center</aligny>
+				<reverse>yes</reverse>
+				<label>$ADDON[adsp.freesurround 30024]</label>
+			</control>
+			<control type="sliderex" id="50">
+				<description>LFE high freq</description>
+				<height>70</height>
+				<font>font24</font>
+				<aligny>center</aligny>
+				<reverse>yes</reverse>
+				<label>$ADDON[adsp.freesurround 30025]</label>
+			</control>
 		</control>
 		<control type="grouplist" id="9001">
 			<posx>0</posx>

@@ -121,6 +121,42 @@
 				<focusedcolor>white</focusedcolor>
 				<label>$ADDON[adsp.freesurround 30017]</label>
 			</control>
+			<control type="image" id="51">
+				<description>separator image</description>
+				<height>2</height>
+				<texture>separator2.png</texture>
+			</control>
+			<control type="radiobutton" id="48">
+				<description>LFE</description>
+				<height>40</height>
+				<texturenofocus border="5">button-nofocus.png</texturenofocus>
+				<texturefocus border="5">button-focus2.png</texturefocus>
+				<font>font13</font>
+				<textcolor>grey2</textcolor>
+				<focusedcolor>white</focusedcolor>
+				<label>$ADDON[adsp.freesurround 30023]</label>
+				<width>720</width>
+			</control>
+			<control type="sliderex" id="49">
+				<description>LFE low freq</description>
+				<label>$ADDON[adsp.freesurround 30024]</label>
+				<height>40</height>
+				<texturenofocus border="5">button-nofocus.png</texturenofocus>
+				<texturefocus border="5">button-focus2.png</texturefocus>
+				<font>font13</font>
+				<textcolor>grey2</textcolor>
+				<focusedcolor>white</focusedcolor>
+			</control>
+			<control type="sliderex" id="50">
+				<description>LFE high freq</description>
+				<label>$ADDON[adsp.freesurround 30025]</label>
+				<height>40</height>
+				<texturenofocus border="5">button-nofocus.png</texturenofocus>
+				<texturefocus border="5">button-focus2.png</texturefocus>
+				<font>font13</font>
+				<textcolor>grey2</textcolor>
+				<focusedcolor>white</focusedcolor>
+			</control>
 		</control>
 		<control type="group" id="9001">
 			<posx>95</posx>

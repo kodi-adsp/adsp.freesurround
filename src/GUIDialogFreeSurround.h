@@ -52,6 +52,9 @@ private:
   CAddonGUISettingsSliderControl  *m_CenterImage;
   CAddonGUISettingsSliderControl  *m_FrontSeparation;
   CAddonGUISettingsSliderControl  *m_RearSeparation;
+  CAddonGUIRadioButton            *m_LFE;
+  CAddonGUISettingsSliderControl  *m_LFE_LowCutoff;
+  CAddonGUISettingsSliderControl  *m_LFE_HighCutoff;
 
   CAddonGUIWindow                 *m_window;
 };

@@ -65,6 +65,27 @@
 					<label>$ADDON[adsp.freesurround 30017]</label>
 					<include>DefaultSettingButton</include>
 				</control>
+				<control type="image" id="51">
+					<description>separator image</description>
+					<height>3</height>
+					<texture colordiffuse="AAAAAAAA" border="3">dialogs/separator-grey.png</texture>
+				</control>
+				<control type="radiobutton" id="48">
+					<description>LFE</description>
+					<label>$ADDON[adsp.freesurround 30023]</label>
+					<include>DefaultSettingButton</include>
+					<width>1160</width>
+				</control>
+				<control type="sliderex" id="49">
+					<description>LFE low freq</description>
+					<label>$ADDON[adsp.freesurround 30024]</label>
+					<include>DefaultSettingButton</include>
+				</control>
+				<control type="sliderex" id="50">
+					<description>LFE high freq</description>
+					<label>$ADDON[adsp.freesurround 30025]</label>
+					<include>DefaultSettingButton</include>
+				</control>
 			</control>
 			<control type="grouplist" id="9001">
 				<left>1210</left>
