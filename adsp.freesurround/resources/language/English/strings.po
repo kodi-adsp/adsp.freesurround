@@ -80,3 +80,15 @@ msgstr ""
 msgctxt "#30022"
 msgid "Focus\nAmbience <-> localization"
 msgstr ""
+
+msgctxt "#30023"
+msgid "Bass redirection"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Low cutoff frequency"
+msgstr ""
+
+msgctxt "#30025"
+msgid "High cutoff frequency"
+msgstr ""
