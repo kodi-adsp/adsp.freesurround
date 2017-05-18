@@ -158,31 +158,6 @@ void ADDON_Destroy()
   m_CurStatus = ADDON_STATUS_UNKNOWN;
 }
 
-bool ADDON_HasSettings()
-{
-  return true;
-}
-
-const char* GetAudioDSPAPIVersion(void)
-{
-  return KODI_AE_DSP_API_VERSION;
-}
-
-const char* GetMinimumAudioDSPAPIVersion(void)
-{
-  return KODI_AE_DSP_MIN_API_VERSION;
-}
-
-const char* GetGUIAPIVersion(void)
-{
-  return KODI_GUILIB_API_VERSION;
-}
-
-const char* GetMinimumGUIAPIVersion(void)
-{
-  return KODI_GUILIB_MIN_API_VERSION;
-}
-
 AE_DSP_ERROR GetAddonCapabilities(AE_DSP_ADDON_CAPABILITIES* pCapabilities)
 {
   pCapabilities->bSupportsInputProcess    = false;
@@ -269,10 +244,8 @@ int MasterProcessGetOutChannels(const ADDON_HANDLE handle, unsigned long &out_ch
 /*!
  * Unused DSP addon functions
  */
-unsigned int ADDON_GetSettings(ADDON_StructSetting ***sSet) { return 0; }
 ADDON_STATUS ADDON_SetSetting(const char *settingName, const void *settingValue) { return ADDON_STATUS_OK; }
 void ADDON_Stop() {}
-void ADDON_FreeSettings() {}
 void ADDON_Announce(const char *flag, const char *sender, const char *message, const void *data) {}
 bool InputProcess(const ADDON_HANDLE handle, const float **array_in, unsigned int samples) { return true; }
 unsigned int InputResampleProcessNeededSamplesize(const ADDON_HANDLE handle) { return 0; }
