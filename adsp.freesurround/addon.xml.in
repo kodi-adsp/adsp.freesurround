@@ -4,10 +4,7 @@
 	version="0.3.0"
 	name="Free Surround Processor"
 	provider-name="Team KODI">
-	<requires>
-		<c-pluff version="0.1"/>
-		<import addon="kodi.adsp" version="0.1.8"/>
-	</requires>
+	<requires>@ADDON_DEPENDS@</requires>
 	<extension
 		point="kodi.adsp"
 		library_@PLATFORM@="@LIBRARY_FILENAME@"/>
