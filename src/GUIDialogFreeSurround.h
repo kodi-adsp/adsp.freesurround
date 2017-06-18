@@ -22,39 +22,31 @@
 #include "addon.h"
 #include "FreeSurroundSettings.h"
 
-class CGUIDialogFreeSurround : private CDSPSettings
+#include <kodi/gui/Window.h>
+#include <kodi/gui/controls/SettingsSlider.h>
+#include <kodi/gui/controls/RadioButton.h>
+
+class CGUIDialogFreeSurround : public kodi::gui::CWindow, private CDSPSettings
 {
 public:
   CGUIDialogFreeSurround(unsigned int streamId);
   virtual ~CGUIDialogFreeSurround();
 
-  bool Show();
-  void Close();
-  void DoModal();
+  virtual bool OnInit() override;
+  virtual bool OnClick(int controlId) override;
+  virtual bool OnAction(int actionId) override;
 
 private:
-  bool OnClick(int controlId);
-  bool OnFocus(int controlId);
-  bool OnInit();
-  bool OnAction(int actionId);
+  const unsigned int m_StreamId;
 
-  static bool OnClickCB(GUIHANDLE cbhdl, int controlId);
-  static bool OnFocusCB(GUIHANDLE cbhdl, int controlId);
-  static bool OnInitCB(GUIHANDLE cbhdl);
-  static bool OnActionCB(GUIHANDLE cbhdl, int actionId);
-
-  const unsigned int               m_StreamId;
-
-  CAddonGUISettingsSliderControl  *m_CircularWrap;
-  CAddonGUISettingsSliderControl  *m_Shift;
-  CAddonGUISettingsSliderControl  *m_Depth;
-  CAddonGUISettingsSliderControl  *m_Focus;
-  CAddonGUISettingsSliderControl  *m_CenterImage;
-  CAddonGUISettingsSliderControl  *m_FrontSeparation;
-  CAddonGUISettingsSliderControl  *m_RearSeparation;
-  CAddonGUIRadioButton            *m_LFE;
-  CAddonGUISettingsSliderControl  *m_LFE_LowCutoff;
-  CAddonGUISettingsSliderControl  *m_LFE_HighCutoff;
-
-  CAddonGUIWindow                 *m_window;
+  kodi::gui::controls::CSettingsSlider *m_CircularWrap;
+  kodi::gui::controls::CSettingsSlider *m_Shift;
+  kodi::gui::controls::CSettingsSlider *m_Depth;
+  kodi::gui::controls::CSettingsSlider *m_Focus;
+  kodi::gui::controls::CSettingsSlider *m_CenterImage;
+  kodi::gui::controls::CSettingsSlider *m_FrontSeparation;
+  kodi::gui::controls::CSettingsSlider *m_RearSeparation;
+  kodi::gui::controls::CRadioButton *m_LFE;
+  kodi::gui::controls::CSettingsSlider *m_LFE_LowCutoff;
+  kodi::gui::controls::CSettingsSlider *m_LFE_HighCutoff;
 };

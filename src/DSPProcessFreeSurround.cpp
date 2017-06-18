@@ -22,8 +22,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "libXBMC_addon.h"
-#include "libKODI_adsp.h"
 #include "p8-platform/util/StdString.h"
 
 #include "addon.h"
@@ -168,7 +166,7 @@ float CDSPProcess_FreeSurround::StreamGetDelay()
   return delay;
 }
 
-unsigned int CDSPProcess_FreeSurround::StreamProcess(float **array_in, float **array_out, unsigned int samples)
+unsigned int CDSPProcess_FreeSurround::StreamProcess(const float **array_in, float **array_out, unsigned int samples)
 {
   if (!m_Decoder)
     return samples;

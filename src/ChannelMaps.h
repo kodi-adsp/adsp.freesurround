@@ -28,7 +28,7 @@
 #include <vector>
 #include <map>
 
-#include "kodi_adsp_types.h"
+#include <kodi/addon-instance/AudioDSP.h>
 
 /*
  * Identifier translation from FreeSurround to KODI ADSP
