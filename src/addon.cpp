@@ -20,91 +20,54 @@
 #include <vector>
 #include <string>
 #include "addon.h"
-#include "kodi_adsp_dll.h"
+#include <kodi/Filesystem.h>
 #include "p8-platform/util/util.h"
 #include "p8-platform/util/StdString.h"
 #include "GUIDialogFreeSurround.h"
 #include "DSPProcessFreeSurround.h"
 
 using namespace std;
-using namespace ADDON;
-
-#ifdef TARGET_WINDOWS
-#define snprintf _snprintf
-#endif
-
-#if defined(TARGET_WINDOWS)
-  #undef CreateDirectory
-#endif
 
 #define ID_MASTER_PROCESS_FREE_SURROUND   1300
 
-
-/* User adjustable settings are saved here.
- * Default values are defined inside addon.h
- * and exported to the other source files.
- */
-std::string               g_strUserPath   = "";
-std::string               g_strAddonPath  = "";
-CHelper_libXBMC_addon    *KODI            = NULL;
-CHelper_libKODI_adsp     *ADSP            = NULL;
-CHelper_libKODI_guilib   *GUI             = NULL;
-ADDON_STATUS              m_CurStatus     = ADDON_STATUS_UNKNOWN;
-AE_DSP_MENUHOOK           m_MenuHook;
 CDSPProcess_FreeSurround *g_usedDSPs[AE_DSP_STREAM_MAX_STREAMS];
-struct AE_DSP_MODES::AE_DSP_MODE m_ModeInfoStruct;
 
-extern "C" {
-
-void ADDON_ReadSettings(void)
+class CFreeSurroundAddon
+  : public kodi::addon::CAddonBase,
+    public kodi::addon::CInstanceAudioDSP
 {
-}
+public:
+  CFreeSurroundAddon();
+  virtual ~CFreeSurroundAddon();
 
-ADDON_STATUS ADDON_Create(void* hdl, void* props)
+  virtual ADDON_STATUS Create() override;
+  virtual void GetCapabilities(AE_DSP_ADDON_CAPABILITIES& capabilities) override;
+  virtual std::string GetDSPName() override { return "Free Surround Processor"; }
+  virtual std::string GetDSPVersion() override { return FREESURROUND_VERSION; };
+  virtual AE_DSP_ERROR MenuHook(const AE_DSP_MENUHOOK& menuhook, const AE_DSP_MENUHOOK_DATA& item) override;
+  virtual AE_DSP_ERROR StreamCreate(const AE_DSP_SETTINGS& addonSettings, const AE_DSP_STREAM_PROPERTIES& properties, ADDON_HANDLE handle) override;
+  virtual AE_DSP_ERROR StreamDestroy(const ADDON_HANDLE handle) override;
+  virtual AE_DSP_ERROR StreamInitialize(const ADDON_HANDLE handle, const AE_DSP_SETTINGS& addonSettings) override;
+  virtual AE_DSP_ERROR StreamIsModeSupported(const ADDON_HANDLE handle, AE_DSP_MODE_TYPE type, unsigned int mode_id, int unique_db_mode_id) override;
+  virtual float MasterProcessGetDelay(const ADDON_HANDLE handle) override;
+  virtual unsigned int MasterProcess(const ADDON_HANDLE handle, const float** array_in, float** array_out, unsigned int samples) override;
+  virtual int MasterProcessGetOutChannels(const ADDON_HANDLE handle, unsigned long& out_channel_present_flags) override;
+
+private:
+  AE_DSP_MENUHOOK m_MenuHook;
+  struct AE_DSP_MODES::AE_DSP_MODE m_ModeInfoStruct;
+};
+
+CFreeSurroundAddon::CFreeSurroundAddon()
 {
-  if (!hdl || !props)
-    return ADDON_STATUS_UNKNOWN;
-
-  AE_DSP_PROPERTIES* adspprops = (AE_DSP_PROPERTIES*)props;
-
-  KODI = new CHelper_libXBMC_addon;
-  if (!KODI->RegisterMe(hdl))
-  {
-    SAFE_DELETE(KODI);
-    return ADDON_STATUS_PERMANENT_FAILURE;
-  }
-
-  GUI = new CHelper_libKODI_guilib;
-  if (!GUI->RegisterMe(hdl))
-  {
-    SAFE_DELETE(GUI);
-    SAFE_DELETE(KODI);
-    return ADDON_STATUS_PERMANENT_FAILURE;
-  }
-
-  ADSP = new CHelper_libKODI_adsp;
-  if (!ADSP->RegisterMe(hdl))
-  {
-    SAFE_DELETE(ADSP);
-    SAFE_DELETE(GUI);
-    SAFE_DELETE(KODI);
-    return ADDON_STATUS_PERMANENT_FAILURE;
-  }
-
-  KODI->Log(LOG_DEBUG, "%s - Creating the Audio DSP free surround add-on", __FUNCTION__);
-
-  m_CurStatus     = ADDON_STATUS_UNKNOWN;
-  g_strUserPath   = adspprops->strUserPath;
-  g_strAddonPath  = adspprops->strAddonPath;
-
   // create addon user path
-  if (!KODI->DirectoryExists(g_strUserPath.c_str()))
+  if (!kodi::vfs::DirectoryExists(kodi::GetBaseUserPath()))
   {
-    KODI->CreateDirectory(g_strUserPath.c_str());
+    kodi::vfs::CreateDirectory(kodi::GetBaseUserPath());
   }
 
   for (int i = 0; i < AE_DSP_STREAM_MAX_STREAMS; ++i)
-    g_usedDSPs[i] = NULL;
+    g_usedDSPs[i] = nullptr;
 
   CDSPSettings settings;
   settings.LoadSettingsData(true);
@@ -123,66 +86,37 @@ ADDON_STATUS ADDON_Create(void* hdl, void* props)
   m_ModeInfoStruct.bIsDisabled            = false;
 
   strncpy(m_ModeInfoStruct.strModeName, "Free Surround", sizeof(m_ModeInfoStruct.strModeName) - 1);
-  imagePath = g_strAddonPath;
+  imagePath = kodi::GetAddonPath();
   imagePath += "/resources/skins/Confluence/media/adsp-freesurround.png";
   strncpy(m_ModeInfoStruct.strOwnModeImage, imagePath.c_str(), sizeof(m_ModeInfoStruct.strOwnModeImage) - 1);
   memset(m_ModeInfoStruct.strOverrideModeImage, 0, sizeof(m_ModeInfoStruct.strOwnModeImage)); // unused
-  ADSP->RegisterMode(&m_ModeInfoStruct);
+  RegisterMode(&m_ModeInfoStruct);
 
   m_MenuHook.iHookId                      = ID_MASTER_PROCESS_FREE_SURROUND;
   m_MenuHook.category                     = AE_DSP_MENUHOOK_MASTER_PROCESS;
   m_MenuHook.iLocalizedStringId           = 30001;
   m_MenuHook.iRelevantModeId              = ID_MASTER_PROCESS_FREE_SURROUND;
   m_MenuHook.bNeedPlayback                = true;
-  ADSP->AddMenuHook(&m_MenuHook);
-
-  m_CurStatus = ADDON_STATUS_OK;
-
-  return m_CurStatus;
+  AddMenuHook(&m_MenuHook);
 }
 
-ADDON_STATUS ADDON_GetStatus()
-{
-  return m_CurStatus;
-}
-
-void ADDON_Destroy()
+CFreeSurroundAddon::~CFreeSurroundAddon()
 {
   for (int i = 0; i < AE_DSP_STREAM_MAX_STREAMS; ++i)
     SAFE_DELETE(g_usedDSPs[i]);
-
-  SAFE_DELETE(ADSP);
-  SAFE_DELETE(GUI);
-  SAFE_DELETE(KODI);
-
-  m_CurStatus = ADDON_STATUS_UNKNOWN;
 }
 
-AE_DSP_ERROR GetAddonCapabilities(AE_DSP_ADDON_CAPABILITIES* pCapabilities)
+void CFreeSurroundAddon::GetCapabilities(AE_DSP_ADDON_CAPABILITIES& capabilities)
 {
-  pCapabilities->bSupportsInputProcess    = false;
-  pCapabilities->bSupportsPreProcess      = false;
-  pCapabilities->bSupportsInputResample   = false;
-  pCapabilities->bSupportsMasterProcess   = true;
-  pCapabilities->bSupportsPostProcess     = false;
-  pCapabilities->bSupportsOutputResample  = false;
-
-  return AE_DSP_ERROR_NO_ERROR;
+  capabilities.bSupportsInputProcess    = false;
+  capabilities.bSupportsPreProcess      = false;
+  capabilities.bSupportsInputResample   = false;
+  capabilities.bSupportsMasterProcess   = true;
+  capabilities.bSupportsPostProcess     = false;
+  capabilities.bSupportsOutputResample  = false;
 }
 
-const char *GetDSPName(void)
-{
-  static const char *strBackendName = "Free Surround Processor";
-  return strBackendName;
-}
-
-const char *GetDSPVersion(void)
-{
-  static const char *strDSPVersion = FREESURROUND_VERSION;
-  return strDSPVersion;
-}
-
-AE_DSP_ERROR CallMenuHook(const AE_DSP_MENUHOOK &menuhook, const AE_DSP_MENUHOOK_DATA &item)
+AE_DSP_ERROR CFreeSurroundAddon::MenuHook(const AE_DSP_MENUHOOK &menuhook, const AE_DSP_MENUHOOK_DATA &item)
 {
   if (menuhook.iHookId == ID_MASTER_PROCESS_FREE_SURROUND)
   {
@@ -193,13 +127,13 @@ AE_DSP_ERROR CallMenuHook(const AE_DSP_MENUHOOK &menuhook, const AE_DSP_MENUHOOK
   return AE_DSP_ERROR_UNKNOWN;
 }
 
-AE_DSP_ERROR StreamCreate(const AE_DSP_SETTINGS *addonSettings, const AE_DSP_STREAM_PROPERTIES* pProperties, ADDON_HANDLE handle)
+AE_DSP_ERROR CFreeSurroundAddon::StreamCreate(const AE_DSP_SETTINGS& addonSettings, const AE_DSP_STREAM_PROPERTIES& pProperties, ADDON_HANDLE handle)
 {
-  CDSPProcess_FreeSurround *proc = new CDSPProcess_FreeSurround(addonSettings->iStreamID);
-  AE_DSP_ERROR err = proc->StreamCreate(addonSettings, pProperties);
+  CDSPProcess_FreeSurround *proc = new CDSPProcess_FreeSurround(addonSettings.iStreamID);
+  AE_DSP_ERROR err = proc->StreamCreate(&addonSettings, &pProperties);
   if (err == AE_DSP_ERROR_NO_ERROR)
   {
-    handle->dataIdentifier             = addonSettings->iStreamID;
+    handle->dataIdentifier             = addonSettings.iStreamID;
     handle->callerAddress              = proc;
     g_usedDSPs[handle->dataIdentifier] = proc; //!< Still used in table to have identification on settings dialog
   }
@@ -208,7 +142,7 @@ AE_DSP_ERROR StreamCreate(const AE_DSP_SETTINGS *addonSettings, const AE_DSP_STR
   return err;
 }
 
-AE_DSP_ERROR StreamDestroy(const ADDON_HANDLE handle)
+AE_DSP_ERROR CFreeSurroundAddon::StreamDestroy(const ADDON_HANDLE handle)
 {
   AE_DSP_ERROR err = ((CDSPProcess_FreeSurround*)handle->callerAddress)->StreamDestroy();
   delete ((CDSPProcess_FreeSurround*)handle->callerAddress);
@@ -216,54 +150,29 @@ AE_DSP_ERROR StreamDestroy(const ADDON_HANDLE handle)
   return err;
 }
 
-AE_DSP_ERROR StreamInitialize(const ADDON_HANDLE handle, const AE_DSP_SETTINGS *settings)
+AE_DSP_ERROR CFreeSurroundAddon::StreamInitialize(const ADDON_HANDLE handle, const AE_DSP_SETTINGS& settings)
 {
-  return ((CDSPProcess_FreeSurround*)handle->callerAddress)->StreamInitialize(settings);
+  return ((CDSPProcess_FreeSurround*)handle->callerAddress)->StreamInitialize(&settings);
 }
 
-AE_DSP_ERROR StreamIsModeSupported(const ADDON_HANDLE handle, AE_DSP_MODE_TYPE type, unsigned int mode_id, int unique_db_mode_id)
+AE_DSP_ERROR CFreeSurroundAddon::StreamIsModeSupported(const ADDON_HANDLE handle, AE_DSP_MODE_TYPE type, unsigned int mode_id, int unique_db_mode_id)
 {
   return ((CDSPProcess_FreeSurround*)handle->callerAddress)->StreamIsModeSupported(type, mode_id, unique_db_mode_id);
 }
 
-float MasterProcessGetDelay(const ADDON_HANDLE handle)
+float CFreeSurroundAddon::MasterProcessGetDelay(const ADDON_HANDLE handle)
 {
   return ((CDSPProcess_FreeSurround*)handle->callerAddress)->StreamGetDelay();
 }
 
-unsigned int MasterProcess(const ADDON_HANDLE handle, float **array_in, float **array_out, unsigned int samples)
+unsigned int CFreeSurroundAddon::MasterProcess(const ADDON_HANDLE handle, const float **array_in, float **array_out, unsigned int samples)
 {
   return ((CDSPProcess_FreeSurround*)handle->callerAddress)->StreamProcess(array_in, array_out, samples);
 }
 
-int MasterProcessGetOutChannels(const ADDON_HANDLE handle, unsigned long &out_channel_present_flags)
+int CFreeSurroundAddon::MasterProcessGetOutChannels(const ADDON_HANDLE handle, unsigned long &out_channel_present_flags)
 {
   return ((CDSPProcess_FreeSurround*)handle->callerAddress)->StreamGetOutChannels(out_channel_present_flags);
 }
 
-/*!
- * Unused DSP addon functions
- */
-ADDON_STATUS ADDON_SetSetting(const char *settingName, const void *settingValue) { return ADDON_STATUS_OK; }
-void ADDON_Stop() {}
-void ADDON_Announce(const char *flag, const char *sender, const char *message, const void *data) {}
-bool InputProcess(const ADDON_HANDLE handle, const float **array_in, unsigned int samples) { return true; }
-unsigned int InputResampleProcessNeededSamplesize(const ADDON_HANDLE handle) { return 0; }
-int InputResampleSampleRate(const ADDON_HANDLE handle) { return 0; }
-float InputResampleGetDelay(const ADDON_HANDLE handle) { return 0.0f; }
-unsigned int InputResampleProcess(const ADDON_HANDLE handle, float **array_in, float **array_out, unsigned int samples) { return 0; }
-unsigned int PreProcessNeededSamplesize(const ADDON_HANDLE handle, unsigned int mode_id) { return 0; }
-float PreProcessGetDelay(const ADDON_HANDLE handle, unsigned int mode_id) { return 0.0f; }
-unsigned int PreProcess(const ADDON_HANDLE handle, unsigned int mode_id, float **array_in, float **array_out, unsigned int samples) { return 0; }
-AE_DSP_ERROR MasterProcessSetMode(const ADDON_HANDLE handle, AE_DSP_STREAMTYPE type, unsigned int client_mode_id, int unique_db_mode_id) { return AE_DSP_ERROR_NO_ERROR; }
-unsigned int MasterProcessNeededSamplesize(const ADDON_HANDLE handle) { return 0; }
-const char *MasterProcessGetStreamInfoString(const ADDON_HANDLE handle) { return ""; }
-unsigned int PostProcessNeededSamplesize(const ADDON_HANDLE handle, unsigned int mode_id) { return 0; }
-float PostProcessGetDelay(const ADDON_HANDLE handle, unsigned int mode_id) { return 0.0f; }
-unsigned int PostProcess(const ADDON_HANDLE handle, unsigned int mode_id, float **array_in, float **array_out, unsigned int samples) { return 0; }
-unsigned int OutputResampleProcessNeededSamplesize(const ADDON_HANDLE handle) { return 0; }
-int OutputResampleSampleRate(const ADDON_HANDLE handle) { return 0; }
-float OutputResampleGetDelay(const ADDON_HANDLE handle) { return 0.0f; }
-unsigned int OutputResampleProcess(const ADDON_HANDLE handle, float **array_in, float **array_out, unsigned int samples) { return 0; }
-
-}
+ADDONCREATOR(CFreeSurroundAddon);

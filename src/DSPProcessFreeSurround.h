@@ -22,9 +22,10 @@
 #include <vector>
 #include <map>
 
-#include "kodi_adsp_types.h"
 #include "FreeSurroundDecoder.h"
 #include "FreeSurroundSettings.h"
+
+#include <kodi/addon-instance/AudioDSP.h>
 
 #define SURROUND_BUFSIZE 8192
 
@@ -56,7 +57,7 @@ public:
   AE_DSP_ERROR StreamInitialize(const AE_DSP_SETTINGS *settings);
   AE_DSP_ERROR StreamIsModeSupported(AE_DSP_MODE_TYPE type, unsigned int mode_id, int unique_db_mode_id);
 
-  unsigned int StreamProcess(float **array_in, float **array_out, unsigned int samples);
+  unsigned int StreamProcess(const float **array_in, float **array_out, unsigned int samples);
   int          StreamGetOutChannels(unsigned long &out_channel_present_flags);
   float        StreamGetDelay();
 

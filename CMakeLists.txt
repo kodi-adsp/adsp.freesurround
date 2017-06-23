@@ -12,7 +12,7 @@ find_package(p8-platform REQUIRED)
 
 include_directories(${kodiplatform_INCLUDE_DIRS}
                     ${p8-platform_INCLUDE_DIRS}
-                    ${KODI_INCLUDE_DIR})
+                    ${KODI_INCLUDE_DIR}/..) # Hack way with "/..", need bigger Kodi cmake rework to match right include ways (becomes done in future)
 
 set(FREESURROUND_SOURCES src/addon.cpp
                          src/GUIDialogFreeSurround.cpp
@@ -22,6 +22,18 @@ set(FREESURROUND_SOURCES src/addon.cpp
                          src/FreeSurroundSettings.cpp
                          src/ChannelMaps.cpp
                          src/FreeSurroundDecoder.cpp)
+
+set(FREESURROUND_HEADERS src/addon.h
+                         src/ChannelMaps.h
+                         src/DSPProcessFreeSurround.h
+                         src/FreeSurroundDecoder.h
+                         src/FreeSurroundSettings.h
+                         src/GUIDialogFreeSurround.h
+                         src/kissfft/_kiss_fft_guts.h
+                         src/kissfft/kiss_fft.h
+                         src/kissfft/kiss_fftnd.h
+                         src/kissfft/kiss_fftndr.h
+                         src/kissfft/kiss_fftr.h)
 
 set(DEPLIBS ${kodiplatform_LIBRARIES}
             ${p8-platform_LIBRARIES})

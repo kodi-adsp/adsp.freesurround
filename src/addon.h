@@ -18,15 +18,7 @@
  *
  */
 
-#include "libXBMC_addon.h"
-#include "libKODI_adsp.h"
-#include "libKODI_guilib.h"
+#include <kodi/addon-instance/AudioDSP.h>
 
 class CDSPProcess_FreeSurround;
-
-extern std::string                   g_strUserPath;
-extern std::string                   g_strAddonPath;
-extern CDSPProcess_FreeSurround     *g_usedDSPs[AE_DSP_STREAM_MAX_STREAMS];
-extern ADDON::CHelper_libXBMC_addon *KODI;
-extern CHelper_libKODI_guilib       *GUI;
-extern CHelper_libKODI_adsp         *ADSP;
+extern CDSPProcess_FreeSurround *g_usedDSPs[AE_DSP_STREAM_MAX_STREAMS];

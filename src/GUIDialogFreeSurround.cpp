@@ -17,17 +17,13 @@
  *
  */
 
-#include "libXBMC_addon.h"
-#include "libKODI_adsp.h"
-#include "libKODI_guilib.h"
-
 #include "util/XMLUtils.h"
 #include "p8-platform/util/util.h"
 
 #include "GUIDialogFreeSurround.h"
 #include "DSPProcessFreeSurround.h"
 
-using namespace ADDON;
+#include <kodi/ActionIDs.h>
 
 #define BUTTON_OK                                   1
 #define BUTTON_CANCEL                               2
@@ -44,119 +40,76 @@ using namespace ADDON;
 #define DSP_SETTING_FREESURROUND_LFE_LOW_CUTOFF     49
 #define DSP_SETTING_FREESURROUND_LFE_HIGH_CUTOFF    50
 
-#define ACTION_NAV_BACK                             92
-
 CGUIDialogFreeSurround::CGUIDialogFreeSurround(unsigned int streamId)
-  : m_StreamId(streamId),
-    m_CircularWrap(NULL),
-    m_Shift(NULL),
-    m_Depth(NULL),
-    m_Focus(NULL),
-    m_CenterImage(NULL),
-    m_FrontSeparation(NULL),
-    m_RearSeparation(NULL),
-    m_LFE(NULL),
-    m_LFE_LowCutoff(NULL),
-    m_LFE_HighCutoff(NULL),
-    m_window(NULL)
+  : CWindow("DialogMasterModeFreeSurround.xml", "skin.estuary", true),
+    m_StreamId(streamId),
+    m_CircularWrap(nullptr),
+    m_Shift(nullptr),
+    m_Depth(nullptr),
+    m_Focus(nullptr),
+    m_CenterImage(nullptr),
+    m_FrontSeparation(nullptr),
+    m_RearSeparation(nullptr),
+    m_LFE(nullptr),
+    m_LFE_LowCutoff(nullptr),
+    m_LFE_HighCutoff(nullptr)
 {
-  m_window              = GUI->Window_create("DialogMasterModeFreeSurround.xml", "skin.estuary", false, true);
-  m_window->m_cbhdl     = this;
-  m_window->CBOnInit    = OnInitCB;
-  m_window->CBOnFocus   = OnFocusCB;
-  m_window->CBOnClick   = OnClickCB;
-  m_window->CBOnAction  = OnActionCB;
 }
 
 CGUIDialogFreeSurround::~CGUIDialogFreeSurround()
 {
-  GUI->Window_destroy(m_window);
-}
-
-bool CGUIDialogFreeSurround::OnInitCB(GUIHANDLE cbhdl)
-{
-  CGUIDialogFreeSurround* dialog = static_cast<CGUIDialogFreeSurround*>(cbhdl);
-  return dialog->OnInit();
-}
-
-bool CGUIDialogFreeSurround::OnClickCB(GUIHANDLE cbhdl, int controlId)
-{
-  CGUIDialogFreeSurround* dialog = static_cast<CGUIDialogFreeSurround*>(cbhdl);
-  return dialog->OnClick(controlId);
-}
-
-bool CGUIDialogFreeSurround::OnFocusCB(GUIHANDLE cbhdl, int controlId)
-{
-  CGUIDialogFreeSurround* dialog = static_cast<CGUIDialogFreeSurround*>(cbhdl);
-  return dialog->OnFocus(controlId);
-}
-
-bool CGUIDialogFreeSurround::OnActionCB(GUIHANDLE cbhdl, int actionId)
-{
-  CGUIDialogFreeSurround* dialog = static_cast<CGUIDialogFreeSurround*>(cbhdl);
-  return dialog->OnAction(actionId);
-}
-
-bool CGUIDialogFreeSurround::Show()
-{
-  if (m_window)
-    return m_window->Show();
-
-  return false;
-}
-
-void CGUIDialogFreeSurround::Close()
-{
-  if (m_window)
-    m_window->Close();
-}
-
-void CGUIDialogFreeSurround::DoModal()
-{
-  if (m_window)
-    m_window->DoModal();
+  delete m_CircularWrap;
+  delete m_Shift;
+  delete m_Depth;
+  delete m_Focus;
+  delete m_CenterImage;
+  delete m_FrontSeparation;
+  delete m_RearSeparation;
+  delete m_LFE;
+  delete m_LFE_LowCutoff;
+  delete m_LFE_HighCutoff;
 }
 
 bool CGUIDialogFreeSurround::OnInit()
 {
   LoadSettingsData();
 
-  m_CircularWrap = GUI->Control_getSettingsSlider(m_window, DSP_SETTING_FREESURROUND_CIRCULAR_WRAP);
+  m_CircularWrap = new kodi::gui::controls::CSettingsSlider(this, DSP_SETTING_FREESURROUND_CIRCULAR_WRAP);
   m_CircularWrap->SetIntRange(0, 360);
   m_CircularWrap->SetIntInterval(5);
   m_CircularWrap->SetIntValue((int)m_Settings.fCircularWrap);
 
-  m_Shift = GUI->Control_getSettingsSlider(m_window, DSP_SETTING_FREESURROUND_SHIFT);
+  m_Shift = new kodi::gui::controls::CSettingsSlider(this, DSP_SETTING_FREESURROUND_SHIFT);
   m_Shift->SetFloatRange(-1.0, +1.0);
   m_Shift->SetFloatValue(m_Settings.fShift);
 
-  m_Depth = GUI->Control_getSettingsSlider(m_window, DSP_SETTING_FREESURROUND_DEPTH);
+  m_Depth = new kodi::gui::controls::CSettingsSlider(this, DSP_SETTING_FREESURROUND_DEPTH);
   m_Depth->SetFloatRange(0, 4.0);
   m_Depth->SetFloatInterval(0.25);
   m_Depth->SetFloatValue(m_Settings.fDepth);
 
-  m_Focus = GUI->Control_getSettingsSlider(m_window, DSP_SETTING_FREESURROUND_FOCUS);
+  m_Focus = new kodi::gui::controls::CSettingsSlider(this, DSP_SETTING_FREESURROUND_FOCUS);
   m_Focus->SetFloatRange(-1.0, +1.0);
   m_Focus->SetFloatValue(m_Settings.fFocus);
 
-  m_CenterImage = GUI->Control_getSettingsSlider(m_window, DSP_SETTING_FREESURROUND_CENTER_IMAGE);
+  m_CenterImage = new kodi::gui::controls::CSettingsSlider(this, DSP_SETTING_FREESURROUND_CENTER_IMAGE);
   m_CenterImage->SetFloatValue(m_Settings.fCenterImage);
 
-  m_FrontSeparation = GUI->Control_getSettingsSlider(m_window, DSP_SETTING_FREESURROUND_FRONT_SEPARATION);
+  m_FrontSeparation = new kodi::gui::controls::CSettingsSlider(this, DSP_SETTING_FREESURROUND_FRONT_SEPARATION);
   m_FrontSeparation->SetFloatValue(m_Settings.fFrontSeparation);
 
-  m_RearSeparation = GUI->Control_getSettingsSlider(m_window, DSP_SETTING_FREESURROUND_REAR_SEPARATION);
+  m_RearSeparation = new kodi::gui::controls::CSettingsSlider(this, DSP_SETTING_FREESURROUND_REAR_SEPARATION);
   m_RearSeparation->SetFloatValue(m_Settings.fRearSeparation);
 
-  m_LFE = GUI->Control_getRadioButton(m_window, DSP_SETTING_FREESURROUND_LFE);
+  m_LFE = new kodi::gui::controls::CRadioButton(this, DSP_SETTING_FREESURROUND_LFE);
   m_LFE->SetSelected(m_Settings.bLFE);
 
-  m_LFE_LowCutoff = GUI->Control_getSettingsSlider(m_window, DSP_SETTING_FREESURROUND_LFE_LOW_CUTOFF);
+  m_LFE_LowCutoff = new kodi::gui::controls::CSettingsSlider(this, DSP_SETTING_FREESURROUND_LFE_LOW_CUTOFF);
   m_LFE_LowCutoff->SetIntRange(40.0f, 400.0f);
   m_LFE_LowCutoff->SetIntInterval(10.0f);
   m_LFE_LowCutoff->SetIntValue(m_Settings.fLowCutoff);
 
-  m_LFE_HighCutoff = GUI->Control_getSettingsSlider(m_window, DSP_SETTING_FREESURROUND_LFE_HIGH_CUTOFF);
+  m_LFE_HighCutoff = new kodi::gui::controls::CSettingsSlider(this, DSP_SETTING_FREESURROUND_LFE_HIGH_CUTOFF);
   m_LFE_HighCutoff->SetIntRange(60.0f, 1000.0f);
   m_LFE_HighCutoff->SetIntInterval(10.0f);
   m_LFE_HighCutoff->SetIntValue(m_Settings.fHighCutoff);
@@ -260,17 +213,7 @@ bool CGUIDialogFreeSurround::OnClick(int controlId)
         if (process)
           process->ResetSettings();
       }
-      m_window->Close();
-      GUI->Control_releaseSettingsSlider(m_CircularWrap);
-      GUI->Control_releaseSettingsSlider(m_Shift);
-      GUI->Control_releaseSettingsSlider(m_Depth);
-      GUI->Control_releaseSettingsSlider(m_Focus);
-      GUI->Control_releaseSettingsSlider(m_CenterImage);
-      GUI->Control_releaseSettingsSlider(m_FrontSeparation);
-      GUI->Control_releaseSettingsSlider(m_RearSeparation);
-      GUI->Control_releaseRadioButton(m_LFE);
-      GUI->Control_releaseSettingsSlider(m_LFE_LowCutoff);
-      GUI->Control_releaseSettingsSlider(m_LFE_HighCutoff);
+      Close();
       break;
     }
     case BUTTON_DEFAULT:
@@ -321,15 +264,9 @@ bool CGUIDialogFreeSurround::OnClick(int controlId)
   return true;
 }
 
-bool CGUIDialogFreeSurround::OnFocus(int controlId)
-{
-  return true;
-}
-
 bool CGUIDialogFreeSurround::OnAction(int actionId)
 {
-  if (actionId == ADDON_ACTION_CLOSE_DIALOG ||
-      actionId == ADDON_ACTION_PREVIOUS_MENU ||
+  if (actionId == ACTION_PREVIOUS_MENU ||
       actionId == ACTION_NAV_BACK)
     return OnClick(BUTTON_CANCEL);
   else
