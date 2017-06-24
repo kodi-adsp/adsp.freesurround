@@ -1,6 +1,6 @@
 #### CI Testing
 * Tarvis-CI for OS X, iOS, Linux [![Build Status](https://travis-ci.org/kodi-adsp/adsp.freesurround.svg?branch=master)](https://travis-ci.org/kodi-adsp/adsp.freesurround)
-* AppVeyor for Windows [![Build status](https://ci.appveyor.com/api/projects/status/4r006cum794fwlsb/branch/master?svg=true)](https://ci.appveyor.com/project/james4kodi-adsp/adsp-freesurround/branch/master)
+* AppVeyor for Windows [![Build status](https://ci.appveyor.com/api/projects/status/wurdy5akf54grp32/branch/master?svg=true)](https://ci.appveyor.com/project/AchimTuran/adsp-freesurround-kh0s4/branch/master)
 * Code analyses for Linux [![Coverity Scan Build Status](https://scan.coverity.com/projects/5120/badge.svg)](https://scan.coverity.com/projects/5120)
 
 # FreeSurround AudioDSP add-on for [Kodi] (http://kodi.tv)
