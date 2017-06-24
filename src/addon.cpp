@@ -32,6 +32,10 @@ using namespace std;
 
 CDSPProcess_FreeSurround *g_usedDSPs[AE_DSP_STREAM_MAX_STREAMS];
 
+#if defined(TARGET_WINDOWS)
+#undef CreateDirectory
+#endif
+
 class CFreeSurroundAddon
   : public kodi::addon::CAddonBase,
     public kodi::addon::CInstanceAudioDSP
@@ -40,7 +44,6 @@ public:
   CFreeSurroundAddon();
   virtual ~CFreeSurroundAddon();
 
-  virtual ADDON_STATUS Create() override;
   virtual void GetCapabilities(AE_DSP_ADDON_CAPABILITIES& capabilities) override;
   virtual std::string GetDSPName() override { return "Free Surround Processor"; }
   virtual std::string GetDSPVersion() override { return FREESURROUND_VERSION; };
@@ -87,7 +90,7 @@ CFreeSurroundAddon::CFreeSurroundAddon()
 
   strncpy(m_ModeInfoStruct.strModeName, "Free Surround", sizeof(m_ModeInfoStruct.strModeName) - 1);
   imagePath = kodi::GetAddonPath();
-  imagePath += "/resources/skins/Confluence/media/adsp-freesurround.png";
+  imagePath += "/resources/media/adsp-freesurround.png";
   strncpy(m_ModeInfoStruct.strOwnModeImage, imagePath.c_str(), sizeof(m_ModeInfoStruct.strOwnModeImage) - 1);
   memset(m_ModeInfoStruct.strOverrideModeImage, 0, sizeof(m_ModeInfoStruct.strOwnModeImage)); // unused
   RegisterMode(&m_ModeInfoStruct);

@@ -63,8 +63,9 @@ before_install:
 #
 before_script:
   - cd $TRAVIS_BUILD_DIR/..
-  - git clone --depth=1 https://github.com/xbmc/xbmc.git
+  - git clone --depth=1 https://github.com/AchimTuran/xbmc.git -b AudioDSP/v2/core-reimplementation_V18
+  - git clone --depth=1 https://github.com/AchimTuran/repo-binary-addons
   - cd $addon_id && mkdir build && cd build
-  - cmake -DADDONS_TO_BUILD=$addon_id -DADDON_SRC_PREFIX=../../../.. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=../../xbmc/addons -DPACKAGE_ZIP=1 ../../xbmc/project/cmake/addons
+  - cmake -DADDONS_TO_BUILD=$addon_id -DADDON_SRC_PREFIX=$TRAVIS_BUILD_DIR -DCMAKE_BUILD_TYPE=Debug -DCMAKE_VERBOSE_MAKEFILE=ON -DPACKAGE_ZIP=ON -DCMAKE_INSTALL_PREFIX=$TRAVIS_BUILD_DIR/xbmc/addons -DADDONS_DEFINITION_DIR=$TRAVIS_BUILD_DIR/repo-binary-addons  $TRAVIS_BUILD_DIR/xbmc/cmake/addons
 
 script: make
