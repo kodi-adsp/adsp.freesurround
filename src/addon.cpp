@@ -90,7 +90,7 @@ CFreeSurroundAddon::CFreeSurroundAddon()
 
   strncpy(m_ModeInfoStruct.strModeName, "Free Surround", sizeof(m_ModeInfoStruct.strModeName) - 1);
   imagePath = kodi::GetAddonPath();
-  imagePath += "/resources/skins/Confluence/media/adsp-freesurround.png";
+  imagePath += "/resources/media/adsp-freesurround.png";
   strncpy(m_ModeInfoStruct.strOwnModeImage, imagePath.c_str(), sizeof(m_ModeInfoStruct.strOwnModeImage) - 1);
   memset(m_ModeInfoStruct.strOverrideModeImage, 0, sizeof(m_ModeInfoStruct.strOwnModeImage)); // unused
   RegisterMode(&m_ModeInfoStruct);
