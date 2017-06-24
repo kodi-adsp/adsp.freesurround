@@ -1,3 +1,5 @@
+include(cmake/addon-template-helpers.cmake)
+
 project(adsp.freesurround)
 
 cmake_minimum_required(VERSION 2.6)
@@ -20,9 +22,11 @@ set(FREESURROUND_SOURCES src/addon.cpp
                          src/DSPProcessFreeSurround.cpp
                          src/FreeSurroundSettings.cpp
                          src/ChannelMaps.cpp
-                         src/FreeSurroundDecoder.cpp)
+                         src/FreeSurroundDecoder.cpp
+                         #)
 
-set(FREESURROUND_HEADERS src/addon.h
+#set(FREESURROUND_HEADERS 
+                         src/addon.h
                          src/ChannelMaps.h
                          src/DSPProcessFreeSurround.h
                          src/FreeSurroundDecoder.h
@@ -32,12 +36,17 @@ set(FREESURROUND_HEADERS src/addon.h
                          src/kissfft/kiss_fft.h
                          src/kissfft/kiss_fftnd.h
                          src/kissfft/kiss_fftndr.h
-                         src/kissfft/kiss_fftr.h)
+                         src/kissfft/kiss_fftr.h
+                         )
 
 set(DEPLIBS ${kodiplatform_LIBRARIES}
             ${p8-platform_LIBRARIES})
 
+addon_source_group("${FREESURROUND_SOURCES}")
+addon_source_group("${FREESURROUND_HEADERS}")
+
 build_addon(adsp.freesurround FREESURROUND DEPLIBS)
+
 
 add_definitions(-DFREESURROUND_VERSION="${FREESURROUND_VERSION}")
 
