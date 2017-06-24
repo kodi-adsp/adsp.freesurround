@@ -11,8 +11,7 @@ find_package(kodiplatform REQUIRED)
 find_package(p8-platform REQUIRED)
 
 include_directories(${kodiplatform_INCLUDE_DIRS}
-                    ${p8-platform_INCLUDE_DIRS}
-                    ${KODI_INCLUDE_DIR}/..) # Hack way with "/..", need bigger Kodi cmake rework to match right include ways (becomes done in future)
+                    ${p8-platform_INCLUDE_DIRS})
 
 set(FREESURROUND_SOURCES src/addon.cpp
                          src/GUIDialogFreeSurround.cpp
