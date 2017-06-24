@@ -32,6 +32,10 @@ using namespace std;
 
 CDSPProcess_FreeSurround *g_usedDSPs[AE_DSP_STREAM_MAX_STREAMS];
 
+#if defined(TARGET_WINDOWS)
+#undef CreateDirectory
+#endif
+
 class CFreeSurroundAddon
   : public kodi::addon::CAddonBase,
     public kodi::addon::CInstanceAudioDSP
@@ -40,7 +44,6 @@ public:
   CFreeSurroundAddon();
   virtual ~CFreeSurroundAddon();
 
-  virtual ADDON_STATUS Create() override;
   virtual void GetCapabilities(AE_DSP_ADDON_CAPABILITIES& capabilities) override;
   virtual std::string GetDSPName() override { return "Free Surround Processor"; }
   virtual std::string GetDSPVersion() override { return FREESURROUND_VERSION; };
