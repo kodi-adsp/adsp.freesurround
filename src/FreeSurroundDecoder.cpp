@@ -82,8 +82,8 @@ CFreeSurroundDecoder::CFreeSurroundDecoder(channel_setup setup, unsigned blocksi
   m_CenterImage     = 1.0;
   m_FrontSeparation = 1.0;
   m_RearSeparation  = 1.0;
-  m_LowCutoff       = 40.0 / m_Samplerate / 2.0 * m_BufferSizeHalf;
-  m_HighCutoff      = 90.0 / m_Samplerate / 2.0 * m_BufferSizeHalf;
+  m_LowCutoff       = 40.0 / (m_Samplerate / 2.0) * m_BufferSizeHalf;
+  m_HighCutoff      = 90.0 / (m_Samplerate / 2.0) * m_BufferSizeHalf;
   m_UseLFE          = true;
 }
 
@@ -360,12 +360,12 @@ void CFreeSurroundDecoder::SetRearSeparation(float v)
 
 void CFreeSurroundDecoder::SetLowCutoff(float v)
 {
-  m_LowCutoff = v/m_Samplerate/2.0*m_BufferSizeHalf;
+  m_LowCutoff = v/(m_Samplerate/2.0)*m_BufferSizeHalf;
 }
 
 void CFreeSurroundDecoder::SetHighCutoff(float v)
 {
-  m_HighCutoff = v/m_Samplerate/2.0*m_BufferSizeHalf;
+  m_HighCutoff = v/(m_Samplerate/2.0)*m_BufferSizeHalf;
 }
 
 void CFreeSurroundDecoder::SetBassRedirection(bool v)
